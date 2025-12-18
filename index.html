@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="原木椎茸栽培シミュレーター - 植菌から収穫まで本格体験">
+    <title>🍄 原木しいたけシミュレーター</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- ヘッダー -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">🍄 原木しいたけシミュレーター</h1>
+                <div class="player-rank" id="playerRank">
+                    <span class="rank-badge">🌱</span>
+                    <span class="rank-name">見習い栽培者</span>
+                    <div class="exp-bar">
+                        <div class="exp-fill" id="expFill"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- ステータスバー -->
+            <section class="status-bar glass-panel">
+                <div class="status-item">
+                    <span class="status-icon">📅</span>
+                    <span class="status-value" id="dayCount">1月1日</span>
+                    <span class="status-label">日付</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-icon" id="seasonIcon">🔬</span>
+                    <span class="status-value" id="season">植菌期</span>
+                    <span class="status-label">シーズン</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-icon">🌤️</span>
+                    <span class="status-value" id="weatherText">晴れ</span>
+                    <span class="status-label">天気</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-icon">💰</span>
+                    <span class="status-value" id="totalMoney">3,000円</span>
+                    <span class="status-label">所持金</span>
+                </div>
+            </section>
+
+            <!-- シーズン案内 -->
+            <div class="season-notice glass-panel" id="seasonNotice"></div>
+
+            <!-- コントロールパネル -->
+            <section class="control-panel glass-panel">
+                <div class="control-left">
+                    <button class="btn btn-auto" id="toggleAuto">⏸️ 時を止める</button>
+                    <button class="btn btn-primary" id="advanceDay">1日進める</button>
+                    <button class="btn btn-primary" id="advanceWeek">1週間進める</button>
+                </div>
+                <div class="control-right">
+                    <button class="btn btn-shop" id="openShop">🛒 ショップ</button>
+                    <button class="btn btn-pack" id="openPacking">📦 販売</button>
+                    <button class="btn btn-batch" id="openBatch">🔧 まとめて管理</button>
+                </div>
+            </section>
+
+            <!-- 在庫表示 -->
+            <section class="inventory-bar glass-panel">
+                <span class="inv-label">📦 在庫:</span>
+                <span class="inv-item">小<strong id="invSmall">0</strong></span>
+                <span class="inv-item">中<strong id="invMedium">0</strong></span>
+                <span class="inv-item">大<strong id="invLarge">0</strong></span>
+                <span class="inv-item">変形<strong id="invDeformed">0</strong></span>
+                <span class="inv-total"><strong id="invTotal">0</strong>g</span>
+                <span class="inv-days" id="invDays"></span>
+            </section>
+
+            <!-- 原木エリア -->
+            <section class="logs-section">
+                <div class="section-header">
+                    <h2>🪵 ほだ木置き場 <span id="logCount">(0本)</span></h2>
+                    <button class="btn btn-add" id="addLog">+ 原木追加</button>
+                </div>
+                <div class="logs-container" id="logsContainer">
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">🌳</div>
+                        <p>原木がありません</p>
+                        <p class="empty-hint">ショップで原木と菌を購入して始めましょう</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- イベントログ -->
+            <section class="event-log glass-panel">
+                <h3>📜 ログ</h3>
+                <div class="log-entries" id="eventLog"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>🍄 原木しいたけシミュレーター</span>
+            <button class="btn-link" id="toggleBgm">🎵 BGM</button>
+            <button class="btn-link" id="toggleSound">🔊 SE</button>
+        </footer>
+    </div>
+
+    <!-- ヘルプボタン -->
+    <button class="help-button" id="helpButton">❓</button>
+
+    <!-- トースト -->
+    <div class="toast-container" id="toastContainer"></div>
+    <div class="harvest-effects" id="harvestEffects"></div>
+
+    <!-- チュートリアル -->
+    <div class="modal" id="tutorialModal">
+        <div class="modal-content modal-large glass-panel">
+            <h3>🍄 原木しいたけシミュレーターへようこそ！</h3>
+            <div class="tutorial-content">
+                <div class="tutorial-section">
+                    <h4>📅 年間スケジュール</h4>
+                    <ul>
+                        <li><strong>1月〜4月</strong>: 🔬 植菌シーズン（最適な時期！）</li>
+                        <li><strong>5月〜6月</strong>: 🌱 成長期（椎茸が発生）</li>
+                        <li><strong>7月〜9月</strong>: ☀️ 夏休み（暑くて発生しない）</li>
+                        <li><strong>10月〜12月</strong>: 🍂 収穫シーズン！</li>
+                    </ul>
+                </div>
+                <div class="tutorial-section">
+                    <h4>🪵 原木栽培の流れ</h4>
+                    <ol>
+                        <li>ショップで<strong>原木</strong>と<strong>菌</strong>を購入</li>
+                        <li>植菌作業（<strong>1-5月のみ可能</strong> ⚠️6-12月は不可）</li>
+                        <li>仮伏せ（1-2月植菌は4/15まで、3-5月は45日間）</li>
+                        <li>本伏せ（10/1まで待機、天地返しで品質UP）</li>
+                        <li>秋から椎茸が発生！</li>
+                    </ol>
+                </div>
+                <div class="tutorial-section">
+                    <h4>🍄 収穫のコツ</h4>
+                    <ul>
+                        <li>成熟した椎茸🍄を<strong>クリックで即収穫</strong></li>
+                        <li>浸水で発生を促進（夏以外）</li>
+                        <li>収穫後は<strong>30日間の休養</strong>が必要</li>
+                        <li>⚠️ 放置すると腐る！<strong>在庫も5日で腐る</strong>ので早めに販売！</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-actions tutorial-actions">
+                <button class="btn btn-secondary" id="resetGame">🔄 最初からやり直す</button>
+                <button class="btn btn-primary btn-large" id="startGame">🚀 ゲームスタート！</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ショップ -->
+    <div class="modal" id="shopModal">
+        <div class="modal-content modal-large glass-panel">
+            <h3>🛒 しいたけショップ</h3>
+            <div class="shop-tabs">
+                <button class="shop-tab active" data-tab="logs">原木</button>
+                <button class="shop-tab" data-tab="spores">菌</button>
+                <button class="shop-tab" data-tab="items">道具</button>
+            </div>
+            <div class="shop-items" id="shopItems"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="closeShop">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 植菌モーダル（選択画面） -->
+    <div class="modal" id="inoculateModal">
+        <div class="modal-content glass-panel">
+            <h3>🔬 植菌作業</h3>
+            <div class="inoculate-info" id="inoculateInfo"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelInoculate">キャンセル</button>
+                <button class="btn btn-primary" id="confirmInoculate">作業開始</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 植菌ミニゲームモーダル -->
+    <div class="modal" id="inoculateGameModal">
+        <div class="modal-content modal-large glass-panel inoculate-game">
+            <h3 id="gameTitle">🔩 穴あけ作業</h3>
+            <p class="game-instruction" id="gameInstruction">原木をタップして穴を開けよう！</p>
+            <div class="game-progress">
+                <span id="gameProgress">0</span> / <span id="gameTotal">10</span>
+            </div>
+            <div class="log-game-area" id="logGameArea">
+                <div class="game-log">🪵</div>
+                <div class="game-holes" id="gameHoles"></div>
+            </div>
+            <button class="btn btn-primary btn-large" id="tapButton">🔩 タップ！</button>
+        </div>
+    </div>
+
+    <!-- 仮伏せ・本伏せモーダル -->
+    <div class="modal" id="fuseModal">
+        <div class="modal-content glass-panel">
+            <h3 id="fuseTitle">作業</h3>
+            <div class="fuse-info" id="fuseInfo"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="closeFuse">閉じる</button>
+                <button class="btn btn-primary" id="confirmFuse">作業する</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- パック詰め -->
+    <div class="modal" id="packingModal">
+        <div class="modal-content glass-panel">
+            <h3>📦 産直販売</h3>
+            <div class="packing-info">
+                <p>100gあたり <strong>300円</strong></p>
+            </div>
+            <div class="packing-stock" id="packingStock"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="closePacking">キャンセル</button>
+                <button class="btn btn-harvest" id="confirmPacking">💰 販売する</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- まとめて管理 -->
+    <div class="modal" id="batchModal">
+        <div class="modal-content modal-large glass-panel">
+            <h3>🔧 まとめて管理</h3>
+            <div class="batch-actions">
+                <button class="btn btn-water" id="batchSoak">💧 全て浸水</button>
+                <button class="btn btn-harvest" id="batchHarvest">🧺 全て収穫</button>
+            </div>
+            <div class="batch-list" id="batchList"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="closeBatch">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ヘルプモーダル -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content glass-panel">
+            <h3 id="helpTitle">ℹ️ ヘルプ</h3>
+            <div class="help-content" id="helpContent"></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="closeHelp">わかった！</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 実績ポップアップ -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="achievement-popup-content">
+            <span class="achievement-popup-icon">🏆</span>
+            <div class="achievement-popup-text">
+                <span class="achievement-popup-title">実績解除！</span>
+                <span class="achievement-popup-name" id="achievementPopupName"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ゲーム終了モーダル -->
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content modal-large glass-panel game-over-modal">
+            <h2>🍄 3年間おつかれさまでした！</h2>
+            <p class="game-over-subtitle">原木の寿命が尽きました</p>
+
+            <div class="score-section">
+                <h3>📊 あなたの成績</h3>
+                <div class="score-grid" id="scoreGrid">
+                    <!-- JSで動的生成 -->
+                </div>
+            </div>
+
+            <div class="share-section">
+                <h4>🎉 結果をシェアしよう！</h4>
+                <div class="share-buttons">
+                    <button class="btn btn-twitter" id="shareTwitter">
+                        <span>𝕏</span> ポスト
+                    </button>
+                    <button class="btn btn-copy" id="copyResult">
+                        📋 コピー
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-primary btn-large" id="restartGame">
+                    🔄 もう一度プレイ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

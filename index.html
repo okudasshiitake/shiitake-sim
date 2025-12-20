@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="原木椎茸栽培シミュレーター - 植菌から収穫まで本格体験">
-    <title>🍄 原木しいたけシミュレーター</title>
+    <meta name="description" content="原木椎茸栽培シミュレータ - 植菌から収穫まで本格体験">
+    <title>🍄 原木椎茸栽培シミュレータ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap"
@@ -18,7 +18,7 @@
         <!-- ヘッダー -->
         <header class="header">
             <div class="header-content">
-                <h1 class="logo">🍄 原木しいたけシミュレーター</h1>
+                <h1 class="logo">🍄 原木椎茸栽培シミュレータ</h1>
                 <div class="player-rank" id="playerRank">
                     <span class="rank-badge">🌱</span>
                     <span class="rank-name">見習い栽培者</span>
@@ -52,6 +52,20 @@
                     <span class="status-value" id="totalMoney">3,000円</span>
                     <span class="status-label">所持金</span>
                 </div>
+                <div class="status-item cat-status" id="catStatus" style="display:none;cursor:pointer;"
+                    onclick="editCatName()" title="クリックで名前変更">
+                    <span class="cat-icon">🐱</span>
+                    <span class="status-label" id="catNameDisplay">招き猫</span>
+                </div>
+                <div class="status-item equipment-status" id="forkliftStatus" style="display:none;" title="フォークリフト導入済み">
+                    <span class="equipment-icon">🚜</span>
+                </div>
+                <div class="status-item equipment-status" id="workerStatus" style="display:none;" title="人を雇用中">
+                    <span class="equipment-icon">👷</span>
+                </div>
+                <div class="status-item equipment-status" id="sprinklerStatus" style="display:none;" title="散水設備導入済み">
+                    <span class="equipment-icon">💦</span>
+                </div>
             </section>
 
             <!-- シーズン案内 -->
@@ -60,14 +74,23 @@
             <!-- コントロールパネル -->
             <section class="control-panel glass-panel">
                 <div class="control-left">
-                    <button class="btn btn-auto" id="toggleAuto">⏸️ 時を止める</button>
-                    <button class="btn btn-primary" id="advanceDay">1日進める</button>
-                    <button class="btn btn-primary" id="advanceWeek">1週間進める</button>
+                    <div class="btn-with-count">
+                        <button class="btn btn-auto active" id="toggleAuto">⏸️ 30秒止める</button>
+                        <span class="btn-count" id="pauseCount"></span>
+                    </div>
+                    <div class="btn-with-count">
+                        <button class="btn btn-primary" id="advanceDay">1日進める</button>
+                        <span class="btn-count" id="dayCount2"></span>
+                    </div>
+                    <div class="btn-with-count">
+                        <button class="btn btn-primary" id="advanceWeek">1週間進める</button>
+                        <span class="btn-count" id="weekCount"></span>
+                    </div>
+                    <button class="btn btn-batch" id="openBatch">🔧 まとめて管理</button>
                 </div>
                 <div class="control-right">
-                    <button class="btn btn-shop" id="openShop">🛒 ショップ</button>
-                    <button class="btn btn-pack" id="openPacking">📦 販売</button>
-                    <button class="btn btn-batch" id="openBatch">🔧 まとめて管理</button>
+                    <button class="btn btn-shop" id="openShop">🛒 仕入れ</button>
+                    <button class="btn btn-pack" id="openSell">🍄 椎茸を販売</button>
                 </div>
             </section>
 
@@ -86,7 +109,6 @@
             <section class="logs-section">
                 <div class="section-header">
                     <h2>🪵 ほだ木置き場 <span id="logCount">(0本)</span></h2>
-                    <button class="btn btn-add" id="addLog">+ 原木追加</button>
                 </div>
                 <div class="logs-container" id="logsContainer">
                     <div class="empty-state" id="emptyState">
@@ -105,8 +127,9 @@
         </main>
 
         <footer class="footer">
-            <span>🍄 原木しいたけシミュレーター</span>
-            <button class="btn-link" id="toggleBgm">🎵 BGM</button>
+            <button class="btn-link" id="openStats">📊 統計</button>
+            <button class="btn-link" id="toggleBgm">🎵 再生</button>
+            <button class="btn-link" id="nextBgm">⏭️</button>
             <button class="btn-link" id="toggleSound">🔊 SE</button>
         </footer>
     </div>
@@ -117,25 +140,32 @@
     <!-- トースト -->
     <div class="toast-container" id="toastContainer"></div>
     <div class="harvest-effects" id="harvestEffects"></div>
-
     <!-- チュートリアル -->
     <div class="modal" id="tutorialModal">
         <div class="modal-content modal-large glass-panel">
-            <h3>🍄 原木しいたけシミュレーターへようこそ！</h3>
+            <h3>🍄 原木椎茸栽培シミュレータへようこそ！</h3>
             <div class="tutorial-content">
+                <div class="tutorial-section">
+                    <h4>🎯 ゲームの目標</h4>
+                    <ul>
+                        <li><strong>3年間</strong>椎茸を栽培してスコアを競おう！</li>
+                        <li>3年経過するとゲーム終了、成績が表示されます</li>
+                        <li>結果はX(Twitter)やInstagramでシェアできます</li>
+                    </ul>
+                </div>
                 <div class="tutorial-section">
                     <h4>📅 年間スケジュール</h4>
                     <ul>
                         <li><strong>1月〜4月</strong>: 🔬 植菌シーズン（最適な時期！）</li>
-                        <li><strong>5月〜6月</strong>: 🌱 成長期（椎茸が発生）</li>
-                        <li><strong>7月〜9月</strong>: ☀️ 夏休み（暑くて発生しない）</li>
+                        <li><strong>5月〜6月</strong>: 🍄 成長期（椎茸が発生）</li>
+                        <li><strong>7月〜9月</strong>: ☀️ 夏休み（暑くて発生しない・害虫注意！）</li>
                         <li><strong>10月〜12月</strong>: 🍂 収穫シーズン！</li>
                     </ul>
                 </div>
                 <div class="tutorial-section">
                     <h4>🪵 原木栽培の流れ</h4>
                     <ol>
-                        <li>ショップで<strong>原木</strong>と<strong>菌</strong>を購入</li>
+                        <li>仕入れで<strong>原木</strong>と<strong>菌</strong>を購入</li>
                         <li>植菌作業（<strong>1-5月のみ可能</strong> ⚠️6-12月は不可）</li>
                         <li>仮伏せ（1-2月植菌は4/15まで、3-5月は45日間）</li>
                         <li>本伏せ（10/1まで待機、天地返しで品質UP）</li>
@@ -143,9 +173,17 @@
                     </ol>
                 </div>
                 <div class="tutorial-section">
+                    <h4>🐛 夏の害虫対策</h4>
+                    <ul>
+                        <li>7〜9月は<strong>コクガ</strong>や<strong>シイタケオオヒロズコガ</strong>が発生</li>
+                        <li>3日以内に「取り除く」ボタンで対処しないと品質低下</li>
+                        <li>🛒 <strong>電撃殺虫器</strong>を買えば蛾類を予防できる！</li>
+                    </ul>
+                </div>
+                <div class="tutorial-section">
                     <h4>🍄 収穫のコツ</h4>
                     <ul>
-                        <li>成熟した椎茸🍄を<strong>クリックで即収穫</strong></li>
+                        <li>成熟した椎茸🍄‍🟫を<strong>クリックで即収穫</strong></li>
                         <li>浸水で発生を促進（夏以外）</li>
                         <li>収穫後は<strong>30日間の休養</strong>が必要</li>
                         <li>⚠️ 放置すると腐る！<strong>在庫も5日で腐る</strong>ので早めに販売！</li>
@@ -166,7 +204,7 @@
             <div class="shop-tabs">
                 <button class="shop-tab active" data-tab="logs">原木</button>
                 <button class="shop-tab" data-tab="spores">菌</button>
-                <button class="shop-tab" data-tab="items">道具</button>
+                <button class="shop-tab" data-tab="items">道具・雇用</button>
             </div>
             <div class="shop-items" id="shopItems"></div>
             <div class="modal-actions">
@@ -195,11 +233,11 @@
             <div class="game-progress">
                 <span id="gameProgress">0</span> / <span id="gameTotal">10</span>
             </div>
-            <div class="log-game-area" id="logGameArea">
+            <div class="log-game-area" id="logGameArea" onclick="handleGameTap()">
                 <div class="game-log">🪵</div>
                 <div class="game-holes" id="gameHoles"></div>
             </div>
-            <button class="btn btn-primary btn-large" id="tapButton">🔩 タップ！</button>
+            <p class="game-hint">👆 上の原木をタップ！</p>
         </div>
     </div>
 
@@ -235,12 +273,51 @@
         <div class="modal-content modal-large glass-panel">
             <h3>🔧 まとめて管理</h3>
             <div class="batch-actions">
-                <button class="btn btn-water" id="batchSoak">💧 全て浸水</button>
-                <button class="btn btn-harvest" id="batchHarvest">🧺 全て収穫</button>
+                <button class="btn btn-water" id="batchSoak">💧 まとめて浸水</button>
+                <button class="btn btn-harvest" id="batchHarvest">🧺 まとめて収穫</button>
+                <button class="btn btn-primary" id="batchInoculate">🔬 まとめて植菌</button>
+                <button class="btn btn-primary" id="batchTenchi">🔄 まとめて天地返し</button>
+                <button class="btn btn-water" id="batchWatering">💦 まとめて散水</button>
             </div>
-            <div class="batch-list" id="batchList"></div>
+            <div class="batch-status" id="batchStatus"></div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" id="closeBatch">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 統計ダッシュボード -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content modal-large glass-panel">
+            <h3>📊 統計ダッシュボード</h3>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-icon">🍄</div>
+                    <div class="stat-value" id="statTotalHarvest">0</div>
+                    <div class="stat-label">総収穫数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="statTotalSales">0円</div>
+                    <div class="stat-label">総売上</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🪵</div>
+                    <div class="stat-value" id="statTotalLogs">0</div>
+                    <div class="stat-label">植菌した原木数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">😿</div>
+                    <div class="stat-value" id="statRottenCount">0</div>
+                    <div class="stat-label">腐った椎茸</div>
+                </div>
+            </div>
+            <div class="stats-details" id="statsDetails">
+                <h4>📈 収穫内訳</h4>
+                <div class="harvest-breakdown" id="harvestBreakdown"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="closeStats">閉じる</button>
             </div>
         </div>
     </div>
@@ -256,6 +333,24 @@
         </div>
     </div>
 
+    <!-- 迷い猫イベントモーダル -->
+    <div class="modal" id="catModal">
+        <div class="modal-content glass-panel cat-modal">
+            <h3>🐱 迷い猫発見！</h3>
+            <div class="cat-visual">😺</div>
+            <p>栽培場の隅に迷い猫がいます！</p>
+            <p>保護しますか？</p>
+            <div class="cat-info">
+                <p>🍼 毎月1日に飼育費 <strong>500円</strong> がかかります</p>
+                <p>🍀 招き猫効果で <strong>売れ残り率80%減少</strong>！</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="adoptCat">🐱 保護する</button>
+                <button class="btn" id="ignoreCat">見送る</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 実績ポップアップ -->
     <div class="achievement-popup" id="achievementPopup">
         <div class="achievement-popup-content">
@@ -263,6 +358,18 @@
             <div class="achievement-popup-text">
                 <span class="achievement-popup-title">実績解除！</span>
                 <span class="achievement-popup-name" id="achievementPopupName"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 確認モーダル -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content glass-panel">
+            <h3 id="confirmTitle">確認</h3>
+            <p id="confirmMessage"></p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="confirmCancel">キャンセル</button>
+                <button class="btn btn-primary" id="confirmOk">OK</button>
             </div>
         </div>
     </div>
@@ -286,6 +393,9 @@
                     <button class="btn btn-twitter" id="shareTwitter">
                         <span>𝕏</span> ポスト
                     </button>
+                    <button class="btn btn-instagram" id="shareInstagram">
+                        📷 Instagram
+                    </button>
                     <button class="btn btn-copy" id="copyResult">
                         📋 コピー
                     </button>
@@ -298,9 +408,14 @@
                 </button>
             </div>
         </div>
-    </div>
 
-    <script src="script.js"></script>
+        <script src="js/config.js"></script>
+        <script src="js/state.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/game.js"></script>
+        <script src="js/actions.js"></script>
+        <script src="js/render.js"></script>
+        <script src="js/main.js"></script>
 </body>
 
 </html>

@@ -13,6 +13,152 @@
     --radius: 12px;
 }
 
+/* 季節ごとの背景 */
+body.season-spring {
+    background: linear-gradient(180deg, #fce4ec 0%, #f8bbd0 50%, #c8e6c9 100%);
+}
+
+body.season-spring::before {
+    content: '🌸';
+    position: fixed;
+    top: 10%;
+    right: 5%;
+    font-size: 3rem;
+    opacity: 0.3;
+    animation: floatSeason 6s ease-in-out infinite;
+}
+
+body.season-spring::after {
+    content: '🌷🌸🌺';
+    position: fixed;
+    bottom: 15%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.25;
+    animation: floatSeason 8s ease-in-out infinite reverse;
+}
+
+body.season-summer {
+    background: linear-gradient(180deg, #81d4fa 0%, #4fc3f7 30%, #43a047 100%);
+}
+
+body.season-summer::before {
+    content: '☀️';
+    position: fixed;
+    top: 8%;
+    right: 8%;
+    font-size: 4rem;
+    opacity: 0.4;
+    animation: rotateSun 20s linear infinite;
+}
+
+body.season-summer::after {
+    content: '🌻🌴🍉';
+    position: fixed;
+    bottom: 12%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.25;
+}
+
+body.season-autumn {
+    background: linear-gradient(180deg, #ffcc80 0%, #ff9800 30%, #795548 100%);
+}
+
+body.season-autumn::before {
+    content: '🍂';
+    position: fixed;
+    top: 15%;
+    right: 10%;
+    font-size: 3rem;
+    opacity: 0.35;
+    animation: fallLeaf 8s ease-in-out infinite;
+}
+
+body.season-autumn::after {
+    content: '🍁🌰🍄';
+    position: fixed;
+    bottom: 10%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.3;
+}
+
+body.season-winter {
+    background: linear-gradient(180deg, #eceff1 0%, #b0bec5 30%, #546e7a 100%);
+}
+
+body.season-winter::before {
+    content: '❄️';
+    position: fixed;
+    top: 10%;
+    right: 8%;
+    font-size: 3rem;
+    opacity: 0.4;
+    animation: snowfall 5s ease-in-out infinite;
+}
+
+body.season-winter::after {
+    content: '⛄❄️🎄';
+    position: fixed;
+    bottom: 12%;
+    left: 5%;
+    font-size: 2.5rem;
+    opacity: 0.3;
+}
+
+@keyframes floatSeason {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(5deg);
+    }
+}
+
+@keyframes rotateSun {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fallLeaf {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(10px) rotate(15deg);
+    }
+
+    75% {
+        transform: translateY(-5px) rotate(-10deg);
+    }
+}
+
+@keyframes snowfall {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: translateY(10px);
+        opacity: 0.2;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -168,6 +314,30 @@ body {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.control-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.control-right .btn {
+    flex: 1;
+    max-width: 150px;
+    justify-content: center;
+}
+
+.btn-with-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.btn-count {
+    font-size: 0.65rem;
+    color: var(--color-muted);
 }
 
 /* ボタン */
@@ -395,6 +565,26 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
+}
+
+.log-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    padding: 2px;
+    transition: 0.2s;
+}
+
+.btn-delete:hover {
+    opacity: 1;
 }
 
 .log-name {
@@ -1199,15 +1389,21 @@ body {
     display: flex;
     gap: 10px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .btn-twitter {
-    background: #1da1f2;
+    background: #000;
     color: white;
 }
 
 .btn-twitter span {
     font-weight: 700;
+}
+
+.btn-instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
 }
 
 .btn-copy {
@@ -1312,4 +1508,472 @@ body {
 
 #tapButton:active {
     transform: scale(0.95);
+}
+
+/* 猫イベント */
+.cat-modal {
+    text-align: center;
+}
+
+.cat-visual {
+    font-size: 4rem;
+    margin: 15px 0;
+    animation: catBounce 1s ease-in-out infinite;
+}
+
+@keyframes catBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.cat-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.cat-info p {
+    margin: 5px 0;
+}
+
+.cat-status {
+    background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+
+.cat-icon {
+    font-size: 1.5rem;
+    animation: catWiggle 2s ease-in-out infinite;
+}
+
+@keyframes catWiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-5deg);
+    }
+
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+/* ランクコメント */
+.rank-comment {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.rank-comment p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* 赤丸通知アイコン */
+.notify-badge {
+    position: relative;
+}
+
+.notify-badge::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 10px;
+    height: 10px;
+    background: #ff4444;
+    border-radius: 50%;
+    animation: notifyPulse 1s ease-in-out infinite;
+}
+
+@keyframes notifyPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* ヘルプボタン（チュートリアル中も常にクリック可能） */
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4caf50, #388e3c);
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 10002;
+    transition: transform 0.2s;
+}
+
+.help-button:hover {
+    transform: scale(1.1);
+}
+
+/* チュートリアルオーバーレイ */
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.tutorial-highlight {
+    position: absolute;
+    border: 4px solid #4caf50;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+    animation: tutorialGlow 1s ease-in-out infinite;
+    background: transparent;
+    pointer-events: none;
+}
+
+@keyframes tutorialGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4), 0 0 20px rgba(76, 175, 80, 0.8);
+    }
+
+    50% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4), 0 0 40px rgba(76, 175, 80, 1);
+    }
+}
+
+.tutorial-message {
+    background: #ffffff;
+    color: #333;
+    padding: 18px 25px;
+    border-radius: 15px;
+    max-width: 280px;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.3);
+    border: 2px solid #4caf50;
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10001;
+    pointer-events: auto;
+}
+
+/* ターゲット要素自体に緑枠を適用（ガクガク防止用） */
+.tutorial-highlight-border {
+    outline: 4px solid #4caf50 !important;
+    outline-offset: 4px !important;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.8) !important;
+    animation: tutorialGlow 1s ease-in-out infinite !important;
+}
+
+.tutorial-message h4 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #2e7d32;
+}
+
+.tutorial-message p {
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+    font-size: 0.85rem;
+    color: #444;
+}
+
+.tutorial-skip {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    padding: 6px 16px;
+    color: #333;
+    background: #e0e0e0;
+    border: 1px solid #bbb;
+}
+
+.tutorial-hint {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin: 10px 0 0 0;
+    animation: hintPulse 1s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.tutorial-step-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.tutorial-complete {
+    max-width: 380px;
+}
+
+.tutorial-complete h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.5rem;
+    color: #2e7d32;
+}
+
+.tutorial-complete ul {
+    padding-left: 20px;
+}
+
+.tutorial-complete li {
+    margin: 8px 0;
+    color: #555;
+}
+
+.tutorial-arrow {
+    font-size: 3rem;
+    color: #ffeb3b;
+    animation: arrowBounce 0.5s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* 植菌ゲーム木タップ */
+.log-game-area {
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.log-game-area:active {
+    transform: scale(0.95);
+}
+
+.game-hint {
+    text-align: center;
+    color: #81c784;
+    font-size: 1rem;
+    margin-top: 10px;
+    animation: arrowBounce 0.5s ease-in-out infinite;
+}
+
+/* まとめて管理追加ボタン */
+.batch-actions-extra {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.batch-actions-extra .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.batch-status {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* 統計ダッシュボード */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.stats-details {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.stats-details h4 {
+    margin-bottom: 10px;
+    color: #81c784;
+}
+
+.harvest-breakdown {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+/* 設備アイコン */
+.equipment-status {
+    padding: 5px 10px;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(56, 142, 60, 0.3));
+    border-radius: 8px;
+    border: 1px solid rgba(76, 175, 80, 0.5);
+}
+
+.equipment-icon {
+    font-size: 1.2rem;
+}
+
+.batch-status p {
+    margin: 5px 0;
+}
+
+/* 原木カードの赤丸バッジ */
+.log-action-badge {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #f44336;
+    border-radius: 50%;
+    animation: pulseBadge 1s ease-in-out infinite;
+    margin-right: 5px;
+}
+
+@keyframes pulseBadge {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* 植菌ミニゲームの穴 */
+.game-hole {
+    font-size: 1.5rem;
+    color: #888;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.game-hole.filled {
+    color: #ff9800;
+    text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+    animation: holeFilled 0.3s ease-out;
+}
+
+@keyframes holeFilled {
+    0% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* チュートリアルターゲット要素 */
+.tutorial-target {
+    z-index: 10000 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+    animation: targetPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes targetPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
 }

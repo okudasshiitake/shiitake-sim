@@ -9,6 +9,7 @@ let gamePhase = 'drilling';
 let gameCount = 0;
 const GAME_TOTAL = 10;
 let selectedSporeType = 'normal';
+let holdInterval = null; // 長押し用タイマー
 
 // 収穫
 function harvestMushroom(logId, index, e) {
@@ -28,7 +29,26 @@ function harvestMushroom(logId, index, e) {
         return;
     }
 
-    gameState.inventory[m.type]++;
+    // こうしん/どんこ判定
+    const matureDays = m.matureDays || 0;
+    const season = getSeason();
+    let grade = 'normal';
+
+    // 冬季（1-3月）で収穫可能になって2日以内 = どんこ
+    if (season.id === 'winter' && matureDays <= 2) {
+        grade = 'donko';
+    }
+    // 腐る2日前（成熟から3日経過）= こうしん
+    else if (matureDays >= 3) {
+        grade = 'koushin';
+    }
+
+    // 配列形式に変更
+    if (!Array.isArray(gameState.inventory)) {
+        gameState.inventory = [];
+    }
+    gameState.inventory.push({ type: m.type, grade, weight: m.weight });
+
     gameState.totalHarvestWeight += m.weight;
     gameState.totalHarvested = (gameState.totalHarvested || 0) + 1;
     gameState.exp += 2;
@@ -41,7 +61,8 @@ function harvestMushroom(logId, index, e) {
         showToast('😴', '休養開始！30日間浸水不可');
     }
 
-    if (e) createEffect(e.clientX, e.clientY, `+${m.weight}g`);
+    const gradeText = grade === 'donko' ? '🏆どんこ' : grade === 'koushin' ? '📦こうしん' : '';
+    if (e) createEffect(e.clientX, e.clientY, `+${m.weight}g ${gradeText}`);
     playSound('harvest');
     checkAchievements();
     saveState(); render();
@@ -50,11 +71,29 @@ function harvestMushroom(logId, index, e) {
 function harvestLog(logId) {
     const log = gameState.logs.find(l => l.id === logId);
     if (!log || log.restDays > 0) return;
-    const mature = log.mushrooms.filter(m => m.stage === 'mature');
+    const mature = log.mushrooms.filter(m => m.stage === 'mature' && !m.isContaminated && m.type !== 'contaminated');
     if (mature.length === 0) { showToast('🌱', '収穫できる椎茸がありません'); return; }
 
+    // 配列形式に対応
+    if (!Array.isArray(gameState.inventory)) gameState.inventory = [];
+
     let weight = 0;
-    mature.forEach(m => { gameState.inventory[m.type]++; weight += m.weight; });
+    const season = getSeason();
+
+    mature.forEach(m => {
+        // こうしん/どんこ判定
+        const matureDays = m.matureDays || 0;
+        let grade = 'normal';
+        if (season.id === 'winter' && matureDays <= 2) {
+            grade = 'donko';
+        } else if (matureDays >= 3) {
+            grade = 'koushin';
+        }
+
+        gameState.inventory.push({ type: m.type, grade, weight: m.weight });
+        weight += m.weight;
+    });
+
     gameState.totalHarvestWeight += weight;
     gameState.totalHarvested = (gameState.totalHarvested || 0) + mature.length;
     gameState.exp += mature.length * 2;
@@ -66,10 +105,10 @@ function harvestLog(logId) {
     gameState.stats.totalHarvest += mature.length;
     mature.forEach(m => { gameState.stats.harvestBySize[m.type] = (gameState.stats.harvestBySize[m.type] || 0) + 1; });
 
-    log.mushrooms = log.mushrooms.filter(m => m.stage !== 'mature');
+    log.mushrooms = log.mushrooms.filter(m => m.stage !== 'mature' || m.isContaminated || m.type === 'contaminated');
 
     const remainingSprouts = log.mushrooms.filter(m => m.stage === 'sprout').length;
-    if (remainingSprouts === 0) {
+    if (remainingSprouts === 0 && log.mushrooms.length === 0) {
         log.restDays = REST_DAYS;
         addEvent(`${log.name}から${mature.length}個(${weight}g)収穫`, 'harvest');
         showToast('🧺', `${weight}g収穫！30日休養開始`);
@@ -106,8 +145,8 @@ function openInoculate(logId) {
         <p>🪵 ${log.name}に菌を植えます</p>
         <p>所持菌: 普通 ${gameState.shopStock.sporesNormal || 0}本 / 高級 ${gameState.shopStock.sporesPremium || 0}本</p>
         <div style="margin-top:10px;">
-            <label><input type="radio" name="sporeType" value="normal" checked> 普通の菌</label><br>
-            <label><input type="radio" name="sporeType" value="premium"> 高級菌</label>
+            <label><input type="radio" name="sporeType" value="normal" ${selectedSporeType !== 'premium' ? 'checked' : ''}> 普通の菌</label><br>
+            <label><input type="radio" name="sporeType" value="premium" ${selectedSporeType === 'premium' ? 'checked' : ''}> 高級菌</label>
         </div>
     `;
     openModal('inoculateModal');
@@ -122,6 +161,13 @@ function startInoculateGame() {
     if (!gameState.shopStock[stockKey] || gameState.shopStock[stockKey] <= 0) {
         showToast('❌', '菌がありません'); return;
     }
+
+    // チュートリアル中のオーバーレイをクリアして次へ進む
+    closeTutorialOverlay();
+    if (typeof tutorialActive !== 'undefined' && tutorialActive && !gameState.guidedTutorialDone) {
+        nextTutorialStep();
+    }
+
     closeModal('inoculateModal');
 
     // オクダの植菌機を持っていれば簡易モード
@@ -193,6 +239,26 @@ function handleGameTap() {
     }
 }
 
+// 長押し開始（2秒で5穴 = 400ms間隔）
+function startGameHold() {
+    if (holdInterval) return;
+    handleGameTap(); // 最初の1回
+    holdInterval = setInterval(() => {
+        if (gameCount < GAME_TOTAL) {
+            handleGameTap();
+        } else {
+            stopGameHold();
+        }
+    }, 400);
+}
+
+// 長押し終了
+function stopGameHold() {
+    if (holdInterval) {
+        clearInterval(holdInterval);
+        holdInterval = null;
+    }
+}
 function finishInoculate() {
     const log = gameState.logs.find(l => l.id === inoculateLogId);
     if (!log) return;
@@ -227,20 +293,26 @@ function finishInoculate() {
 function openFuse(logId, action) {
     fuseLogId = logId;
     if (action === 'honFuse') {
-        $('fuseTitle').textContent = '🔧 本伏せ作業';
-        // 初回のみ詳細説明を表示
+        const log = gameState.logs.find(l => l.id === logId);
+        if (!log) return;
+
+        // 初回は helpModal で説明を表示
         if (!gameState.firstActions.honFuse) {
-            $('fuseInfo').innerHTML = `
-                <p>仮伏せ完了！本伏せ（並び替え）を行います</p>
-                <p>原木を立てかけて酸素を通すことで、菌がより全体に回って熟成します</p>
-                <p>翌秋から椎茸が収穫できるようになります</p>
-            `;
-        } else {
-            const log = gameState.logs.find(l => l.id === logId);
-            $('fuseInfo').innerHTML = `<p>${log ? log.name : '原木'}を本伏せしますか？</p>`;
+            // helpModal で説明を表示（showFirstTimeHelpが内部でフラグを立てる）
+            $('helpTitle').textContent = '🔧 本伏せについて';
+            $('helpContent').innerHTML = `<p>原木を立てかけて並べ直す作業です。</p><ul><li><strong>酸素を通すこと</strong>で菌がより全体に回って熟成</li><li><strong>10月1日</strong>まで菌まわりを待ちます</li><li>途中で「天地返し」チャンス発生！→<strong>良品質+10%</strong></li><li>夏には「散水」指示が発生。対応しないと品質低下</li><li><strong>害虫(コクガ等)</strong>発生→3日以内に対処！</li></ul>`;
+            openModal('helpModal');
+            gameState.firstActions.honFuse = true;
+            saveState();
         }
-        $('confirmFuse').textContent = '本伏せする';
-        $('confirmFuse').dataset.action = 'honFuse';
+
+        // 本伏せを実行
+        log.stage = 'maturing';
+        log.maturingDays = 0;
+        addEvent(`${log.name}の本伏せ完了！翌秋から収穫可能`, 'info');
+        showToast('✨', '本伏せ完了！');
+        saveState(); render();
+        return;
     }
     openModal('fuseModal');
 }
@@ -248,7 +320,7 @@ function openFuse(logId, action) {
 function confirmFuse() {
     const log = gameState.logs.find(l => l.id === fuseLogId);
     if (!log) return;
-    showFirstTimeHelp('honFuse');
+    gameState.firstActions.honFuse = true;  // 初回フラグを立てる
     log.stage = 'maturing';
     log.maturingDays = 0;
     addEvent(`${log.name}の本伏せ完了！翌秋から収穫可能`, 'info');
@@ -270,14 +342,37 @@ window.doTenchi = function (logId) {
     saveState(); render();
 };
 
-window.removePest = function (logId) {
+// 蛾類を駆除（コクガ、シイタケオオヒロズコガ）
+window.removeMoth = function (logId) {
     const log = gameState.logs.find(l => l.id === logId);
-    if (!log || !log.pestAvailable) return;
-    log.pestAvailable = false;
-    addEvent(`${log.name}の${log.pestType}を取り除いた！`, 'info');
-    showToast('✨', `害虫を取り除いた！`);
+    if (!log || !log.mothAvailable) return;
+    log.mothAvailable = false;
+    addEvent(`${log.name}の${log.mothType}を取り除いた！`, 'info');
+    showToast('✨', `蛾類を取り除いた！`);
     playSound('harvest');
     saveState(); render();
+};
+
+// 甲虫を駆除（ユミアシゴミムシダマシ）
+window.removeBeetle = function (logId) {
+    const log = gameState.logs.find(l => l.id === logId);
+    if (!log || !log.beetleAvailable) return;
+    log.beetleAvailable = false;
+    addEvent(`${log.name}のユミアシゴミムシダマシを取り除いた！`, 'info');
+    showToast('✨', `甲虫を取り除いた！`);
+    playSound('harvest');
+    saveState(); render();
+};
+
+// 後方互換性のため（古いセーブデータ対応）
+window.removePest = function (logId) {
+    const log = gameState.logs.find(l => l.id === logId);
+    if (!log) return;
+    if (log.mothAvailable) {
+        window.removeMoth(logId);
+    } else if (log.beetleAvailable) {
+        window.removeBeetle(logId);
+    }
 };
 
 // 確認モーダル用コールバック

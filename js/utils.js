@@ -25,10 +25,11 @@ function getMonth() {
 
 function getSeason() {
     const m = getMonth();
-    if (m >= 3 && m <= 5) return { id: 'spring', name: '植菌期', icon: '🌸', isInoculation: true, canGrow: true };
-    if (m >= 6 && m <= 8) return { id: 'summer', name: '夏季', icon: '☀️', isSummer: true, canGrow: false };
-    if (m >= 9 && m <= 11) return { id: 'autumn', name: '収穫期', icon: '🍂', isHarvest: true, canGrow: true };
-    return { id: 'winter', name: '冬季', icon: '❄️', isWinter: true, canGrow: true };
+    if (m >= 1 && m <= 3) return { id: 'winter', name: '植菌期', icon: '❄️', isInoculation: true, canGrow: true };
+    if (m === 4) return { id: 'spring', name: '植菌期', icon: '🌸', isInoculation: true, canGrow: true };
+    if (m >= 5 && m <= 6) return { id: 'growth', name: '成長期', icon: '🌱', canGrow: true };
+    if (m >= 7 && m <= 9) return { id: 'summer', name: '夏季', icon: '☀️', isSummer: true, canGrow: false };
+    return { id: 'autumn', name: '栽培期', icon: '🍂', isHarvest: true, canGrow: true };
 }
 
 // イベントログ

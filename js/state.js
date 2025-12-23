@@ -7,7 +7,7 @@ const gameState = {
     day: 0,
     logs: [],
     totalHarvestWeight: 0,
-    totalMoney: 3000,
+    totalMoney: 50000,
     totalSold: 0,
     totalHarvested: 0,
     events: [],
@@ -20,8 +20,11 @@ const gameState = {
     soundEnabled: true,
     tutorialShown: false,
     autoAdvance: true,
-    inventory: { small: 0, medium: 0, large: 0, deformed: 0 },
+    inventory: [],  // { type: 'small'|'medium'|'large'|'deformed', grade: 'donko'|'normal'|'koushin', weight: number }
     inventoryDays: 0,
+    dryingInventory: [],  // 乾燥中の椎茸
+    dryingDaysLeft: 0,    // 乾燥完了までの残り日数
+    driedInventory: [],   // 乾燥済み椎茸
     rottenCount: 0,
     harvestCount: 0,
     gameOver: false,

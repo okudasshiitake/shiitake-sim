@@ -34,7 +34,35 @@ body.season-spring::after {
     bottom: 15%;
     left: 5%;
     font-size: 2rem;
-    opacity: 0.25;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatSeason 8s ease-in-out infinite reverse;
+}
+
+body.season-growth {
+    background: linear-gradient(180deg, #a5d6a7 0%, #66bb6a 50%, #43a047 100%);
+}
+
+body.season-growth::before {
+    content: '🌱';
+    position: fixed;
+    top: 10%;
+    right: 5%;
+    font-size: 3rem;
+    opacity: 0.35;
+    animation: floatSeason 6s ease-in-out infinite;
+}
+
+body.season-growth::after {
+    content: '🌿🌱🍀';
+    position: fixed;
+    bottom: 15%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
     animation: floatSeason 8s ease-in-out infinite reverse;
 }
 
@@ -58,7 +86,9 @@ body.season-summer::after {
     bottom: 12%;
     left: 5%;
     font-size: 2rem;
-    opacity: 0.25;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
 }
 
 body.season-autumn {
@@ -76,12 +106,14 @@ body.season-autumn::before {
 }
 
 body.season-autumn::after {
-    content: '🍁🌰🍄';
+    content: '🍁🌰🍄‍🟫';
     position: fixed;
     bottom: 10%;
     left: 5%;
     font-size: 2rem;
-    opacity: 0.3;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
 }
 
 body.season-winter {
@@ -104,7 +136,9 @@ body.season-winter::after {
     bottom: 12%;
     left: 5%;
     font-size: 2.5rem;
-    opacity: 0.3;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
 }
 
 @keyframes floatSeason {
@@ -201,7 +235,18 @@ body {
     font-weight: 900;
     background: var(--gradient-gold);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    height: 1.5em;
+    width: auto;
+    vertical-align: middle;
 }
 
 .player-rank {
@@ -658,7 +703,7 @@ body {
 
 /* 原木ビジュアル - 大きく */
 .log-visual {
-    background: linear-gradient(180deg, #6d4c41 0%, #5d4037 50%, #4e342e 100%);
+    background: url('image2.png') center center / cover no-repeat;
     border-radius: 8px;
     min-height: 100px;
     position: relative;
@@ -669,11 +714,13 @@ body {
 }
 
 .log-visual.soaking {
-    background: linear-gradient(180deg, #5d99a3 0%, #4a7c8a 50%, #3d6570 100%);
+    background: url('image2.png') center center / cover no-repeat;
+    filter: brightness(0.9) saturate(0.8) hue-rotate(180deg);
 }
 
 .log-visual.fuse {
-    background: linear-gradient(180deg, #78909c 0%, #607d8b 50%, #546e7a 100%);
+    background: url('image2.png') center center / cover no-repeat;
+    filter: brightness(0.85) grayscale(0.3);
 }
 
 /* 椎茸表示 - 原木上に直接 */
@@ -924,7 +971,7 @@ body {
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
-    z-index: 1000;
+    z-index: 200000;
     align-items: center;
     justify-content: center;
     padding: 15px;
@@ -1645,8 +1692,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    background: transparent;
+    z-index: 99999;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1679,31 +1726,115 @@ body {
 .tutorial-message {
     background: #ffffff;
     color: #333;
-    padding: 18px 25px;
-    border-radius: 15px;
-    max-width: 280px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    max-width: 240px;
     text-align: center;
     font-weight: 500;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     border: 2px solid #4caf50;
     position: fixed;
-    bottom: 100px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10001;
+    z-index: 100001;
     pointer-events: auto;
+}
+
+/* スマホ用：チュートリアルメッセージを幅広く、高さは低く */
+@media (max-width: 600px) {
+    .tutorial-message {
+        max-width: 90%;
+        width: 90%;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        bottom: 10px;
+    }
+
+    .tutorial-message h4 {
+        font-size: 0.9rem;
+        margin-bottom: 2px;
+        display: inline;
+    }
+
+    .tutorial-message p {
+        margin: 2px 0;
+        font-size: 0.75rem;
+        display: inline;
+    }
+
+    .tutorial-hint {
+        font-size: 0.7rem !important;
+        display: inline;
+        margin-left: 8px;
+    }
+
+    .tutorial-skip {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        margin-left: 8px;
+    }
 }
 
 /* ターゲット要素自体に緑枠を適用（ガクガク防止用） */
 .tutorial-highlight-border {
     outline: 4px solid #4caf50 !important;
     outline-offset: 4px !important;
-    box-shadow: 0 0 20px rgba(76, 175, 80, 0.8) !important;
-    animation: tutorialGlow 1s ease-in-out infinite !important;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 30px rgba(76, 175, 80, 1) !important;
+    animation: tutorialPulse 1s ease-in-out infinite !important;
+    z-index: 100000 !important;
+    position: relative !important;
+}
+
+/* チュートリアル中はモーダル内のoverflowを見せる */
+.modal:has(.tutorial-highlight-border) .modal-content,
+.modal:has(.tutorial-highlight-border) .shop-items,
+.modal:has(.tutorial-highlight-border) .glass-panel {
+    overflow: visible !important;
+}
+
+/* チュートリアル中はモーダル内のボタンがクリック可能に */
+.tutorial-highlight-border {
+    pointer-events: auto !important;
+}
+
+/* 販売モーダルをスクロール可能に */
+#packingModal.active {
+    overflow-y: auto;
+}
+
+#packingModal .modal-content {
+    max-height: none;
+    margin: 20px auto;
+}
+
+/* スマホ用：販売モーダルのスクロールを改善 */
+@media (max-width: 600px) {
+    #packingModal .modal-content {
+        max-height: 85vh;
+        overflow-y: auto;
+        margin: 10px;
+    }
+
+    /* モーダルが開いている時は背景のスクロールを止める */
+    body:has(.modal.active) {
+        overflow: hidden;
+    }
+}
+
+@keyframes tutorialPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 20px rgba(76, 175, 80, 0.8);
+    }
+
+    50% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 40px rgba(76, 175, 80, 1);
+    }
 }
 
 .tutorial-message h4 {
-    margin: 0 0 10px 0;
     font-size: 1.1rem;
     color: #2e7d32;
 }
@@ -1741,6 +1872,35 @@ body {
 
     50% {
         opacity: 0.6;
+    }
+}
+
+/* スマホ用にチュートリアルメッセージを小さく */
+@media (max-width: 480px) {
+    .tutorial-message {
+        max-width: 200px;
+        padding: 10px 14px;
+        bottom: 60px;
+    }
+
+    .tutorial-message h4 {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-message p {
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-skip {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+        margin-top: 8px;
+    }
+
+    .tutorial-hint {
+        font-size: 0.8rem;
     }
 }
 
@@ -1976,4 +2136,481 @@ body {
     50% {
         transform: scale(1.05);
     }
+}
+
+/* 難易度選択 */
+.difficulty-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.difficulty-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.difficulty-option:hover {
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.difficulty-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+}
+
+.difficulty-label {
+    flex: 1;
+    font-weight: 500;
+}
+
+.difficulty-money {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.custom-money-input {
+    width: 80px;
+    padding: 5px 8px;
+    border: 1px solid #4caf50;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+/* 保険文言・著作権表示 */
+.help-disclaimer {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: #aaa;
+    text-align: center;
+}
+
+.help-disclaimer p {
+    margin: 5px 0;
+}
+
+/* ============================
+   レスポンシブデザイン
+   ============================ */
+
+/* タブレット (768px以下) */
+@media screen and (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    .modal-large {
+        max-width: 95%;
+    }
+
+    .shop-items {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .batch-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* スマホ (480px以下) */
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 12px;
+    }
+
+    .game-container {
+        padding: 3px;
+    }
+
+    .header h1 {
+        font-size: 1rem;
+    }
+
+    .status-bar {
+        flex-wrap: wrap;
+        gap: 3px;
+    }
+
+    .status-item {
+        padding: 3px 5px;
+        font-size: 0.65rem;
+    }
+
+    .control-panel {
+        gap: 3px;
+        flex-wrap: wrap;
+    }
+
+    .control-panel .btn {
+        font-size: 0.6rem;
+        padding: 5px 6px;
+    }
+
+    .log-card {
+        padding: 6px;
+    }
+
+    .log-actions {
+        gap: 3px;
+    }
+
+    .log-actions .btn {
+        font-size: 0.55rem;
+        padding: 3px 5px;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 320px;
+        padding: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .footer {
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .btn-link {
+        font-size: 0.75rem;
+        padding: 5px 8px;
+    }
+
+    /* チュートリアルメッセージ */
+    .tutorial-message {
+        max-width: 200px;
+        padding: 10px 14px;
+        bottom: 60px;
+    }
+
+    .tutorial-message h4 {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-message p {
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-skip {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+        margin-top: 8px;
+    }
+
+    .tutorial-hint {
+        font-size: 0.8rem;
+    }
+
+    /* 統計ダッシュボード */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-icon {
+        font-size: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+
+    /* ヘルプボタン */
+    .help-button {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    /* 原木を横2列表示 */
+    .logs-area {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .log-card {
+        padding: 8px;
+    }
+
+    .log-card h3 {
+        font-size: 0.85rem;
+    }
+
+    .log-status {
+        font-size: 0.7rem;
+    }
+
+    .mushroom-slots {
+        gap: 3px;
+    }
+
+    .mushroom-slot {
+        font-size: 1rem;
+        padding: 3px;
+    }
+
+    .log-actions {
+        flex-wrap: wrap;
+    }
+
+    .log-actions .btn {
+        flex: 1;
+        min-width: 40%;
+    }
+}
+
+/* 小さいスマホ用のさらにコンパクトな表示 */
+@media (max-width: 400px) {
+    .app-container {
+        padding: 8px;
+    }
+
+    .header {
+        padding: 8px;
+        margin-bottom: 6px;
+    }
+
+    .logo {
+        font-size: 1.1rem !important;
+        gap: 4px !important;
+    }
+
+    .logo-icon {
+        height: 1.2em !important;
+    }
+
+    .player-rank {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        margin-top: 4px;
+    }
+
+    .status-bar {
+        padding: 8px;
+        gap: 8px;
+        font-size: 0.8rem;
+    }
+
+    .season-notice {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .control-bar {
+        padding: 6px;
+        gap: 4px;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .btn-small {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+
+    .log-card {
+        padding: 8px;
+    }
+
+    .log-card h3 {
+        font-size: 0.75rem;
+    }
+
+    .log-header {
+        margin-bottom: 4px;
+    }
+
+    .log-status {
+        font-size: 0.65rem;
+        margin-bottom: 4px;
+    }
+
+    .log-visual {
+        min-height: 70px;
+        margin-bottom: 6px;
+    }
+
+    .mushroom-slot {
+        font-size: 0.9rem;
+    }
+
+    .log-actions {
+        gap: 4px;
+    }
+
+    .log-actions .btn {
+        font-size: 0.65rem;
+        padding: 4px 6px;
+    }
+
+    .inventory-bar {
+        padding: 8px;
+        font-size: 0.75rem;
+    }
+
+    .footer {
+        padding: 8px;
+    }
+
+    .footer .btn-link {
+        font-size: 0.7rem;
+        padding: 4px;
+    }
+}
+
+/* 音声ボタンのスタイル */
+.btn-audio {
+    transition: all 0.2s ease;
+}
+
+.btn-audio.active {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.btn-audio:not(.active) {
+    color: var(--color-muted);
+    opacity: 0.7;
+}
+
+/* 販売オプション */
+.sell-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.sell-option {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.sell-option h4 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+}
+
+.sell-option p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.sell-option .sell-note {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-bottom: 10px;
+}
+
+.sell-option .sell-price {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.sell-option .btn {
+    width: 100%;
+}
+
+/* 価格表 */
+.price-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    margin: 10px 0;
+}
+
+.price-table th,
+.price-table td {
+    padding: 4px 6px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.price-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+}
+
+.price-table td:first-child {
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* 3列レイアウト */
+@media (min-width: 600px) {
+    .sell-options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 599px) {
+    .sell-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 在庫表 */
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin: 10px 0;
+}
+
+.inventory-table th,
+.inventory-table td {
+    padding: 4px 8px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inventory-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+}
+
+.inventory-table td:first-child {
+    text-align: left;
+    font-weight: 500;
 }

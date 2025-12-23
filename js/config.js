@@ -10,7 +10,7 @@ const START_YEAR = 2026;
 // ゲーム設定
 const GAME_DURATION_DAYS = 1095;
 const DAY_BUTTON_LIMIT = 500;
-const WEEK_BUTTON_LIMIT = 30;
+const WEEK_BUTTON_LIMIT = 50;
 const PAUSE_LIMIT = 5;
 const PAUSE_DURATION = 30000;
 const PACK_PRICE = 300;
@@ -44,7 +44,8 @@ const WEATHER = {
     sunny: { name: '晴れ', icon: '☀️' },
     cloudy: { name: '曇り', icon: '☁️' },
     rain: { name: '雨', icon: '🌧️' },
-    storm: { name: '台風', icon: '🌀' }
+    storm: { name: '台風', icon: '🌀' },
+    snow: { name: '大雪', icon: '❄️' }
 };
 
 // ショップアイテム
@@ -59,11 +60,14 @@ const SHOP_SPORES = [
 ];
 
 const SHOP_ITEMS = [
-    { id: 'okudaMachine', name: 'オクダの植菌機', icon: '🔧', desc: '木をなぞるだけで穴あけ＆植菌！', price: 5000 },
-    { id: 'greenhouse', name: '栽培ハウス', icon: '🏠', desc: '腐敗遅延・天候影響軽減', price: 8000 },
-    { id: 'refrigerator', name: '業務用冷蔵庫', icon: '❄️', desc: '在庫の保存期間延長', price: 5000 },
     { id: 'bugzapper', name: '電撃殺虫器', icon: '⚡', desc: 'コクガ・シイタケオオヒロズコガを予防', price: 2000 },
-    { id: 'forklift', name: 'フォークリフト', icon: '🚜', desc: 'まとめて浸水が可能に', price: 30000 },
-    { id: 'worker', name: '人を雇う', icon: '👷', desc: 'まとめて植菌・天地返しが可能に', price: 20000 },
-    { id: 'sprinkler', name: '散水設備', icon: '💦', desc: 'まとめて散水が可能に', price: 20000 }
+    { id: 'okudaMachine', name: 'オクダの植菌機', icon: '🔧', desc: '穴あけと植菌を同時に。時間と手間を50%削減', price: 5000 },
+    { id: 'refrigerator', name: '業務用冷蔵庫', icon: '❄️', desc: '在庫の保存期間延長', price: 5000 },
+    { id: 'greenhouse', name: '栽培ハウス', icon: '🏠', desc: '腐敗遅延・天候影響軽減（台風/大雪で壊れる場合あり）', price: 8000 },
+    { id: 'dryer', name: '乾燥機', icon: '🌞', desc: '収穫・売れ残り椎茸を乾燥可能（1回500円・1日）', price: 10000 },
+    { id: 'shadenet', name: '遮光ネット', icon: '🌿', desc: '良ほだ確率+20%（台風で壊れる場合あり）', price: 10000 },
+    { id: 'sprinkler', name: '散水設備', icon: '💦', desc: 'まとめて散水が可能に（大雪で壊れる場合あり）', price: 20000 },
+    { id: 'insurance', name: '災害保険', icon: '🛡️', desc: '台風/大雪で設備が壊れた時に補償金を受取', price: 0, monthlyPrice: 1000 },
+    { id: 'forklift', name: 'フォークリフト', icon: '🚜', desc: 'まとめて浸水が可能に', price: 30000, monthlyPrice: 1000 },
+    { id: 'worker', name: '人を雇う', icon: '👷', desc: 'まとめて作業可（資金不足で退職）', price: 5000, monthly: true }
 ];

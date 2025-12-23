@@ -15,7 +15,7 @@ function renderStatus() {
     const rank = RANKS.find((r, i) => !RANKS[i + 1] || gameState.exp < RANKS[i + 1].exp);
 
     // 季節に応じて背景を変更
-    document.body.classList.remove('season-spring', 'season-summer', 'season-autumn', 'season-winter');
+    document.body.classList.remove('season-spring', 'season-growth', 'season-summer', 'season-autumn', 'season-winter');
     document.body.classList.add(`season-${season.id}`);
 
     $('dayCount').textContent = dateStr(gameState.day);
@@ -54,8 +54,8 @@ function renderStatus() {
 }
 
 function updateNotifyBadges() {
-    const inv = gameState.inventory;
-    const totalStock = inv.small + inv.medium + inv.large + inv.deformed;
+    const inv = Array.isArray(gameState.inventory) ? gameState.inventory : [];
+    const totalStock = inv.length;
 
     const sellBtn = $('openSell');
     if (sellBtn) sellBtn.classList.toggle('notify-badge', totalStock > 0);
@@ -108,15 +108,26 @@ function renderSeasonNotice() {
 }
 
 function renderInventory() {
-    const inv = gameState.inventory;
-    $('invSmall').textContent = inv.small;
-    $('invMedium').textContent = inv.medium;
-    $('invLarge').textContent = inv.large;
-    $('invDeformed').textContent = inv.deformed;
-    const total = inv.small * 10 + inv.medium * 20 + inv.large * 30 + inv.deformed * 15;
-    $('invTotal').textContent = total;
+    const inv = Array.isArray(gameState.inventory) ? gameState.inventory : [];
 
-    if (total > 0) {
+    // サイズとグレードでカウント
+    const counts = { small: 0, medium: 0, large: 0, deformed: 0 };
+    const grades = { donko: 0, normal: 0, koushin: 0 };
+    let totalWeight = 0;
+
+    inv.forEach(item => {
+        counts[item.type] = (counts[item.type] || 0) + 1;
+        grades[item.grade] = (grades[item.grade] || 0) + 1;
+        totalWeight += item.weight || 50;
+    });
+
+    $('invSmall').textContent = counts.small;
+    $('invMedium').textContent = counts.medium;
+    $('invLarge').textContent = counts.large;
+    $('invDeformed').textContent = counts.deformed;
+    $('invTotal').textContent = totalWeight;
+
+    if (inv.length > 0) {
         // 冷蔵庫購入時は10日間、通常は5日間
         let days = gameState.ownedItems.includes('refrigerator') ? 10 : INVENTORY_ROT_DAYS;
         $('invDays').textContent = `(残${days - gameState.inventoryDays}日)`;
@@ -159,8 +170,9 @@ function renderLogs() {
         const canSoak = log.stage === 'active' && log.restDays === 0 && !log.soaking && !season.isSummer;
         const hasTenchi = log.tenchiAvailable;
         const hasWatering = log.wateringAvailable;
-        const hasPest = log.pestAvailable;
-        const hasAction = canInoculate || canHonFuse || canHarvest || canSoak || hasTenchi || hasWatering || hasPest;
+        const hasMoth = log.mothAvailable;
+        const hasBeetle = log.beetleAvailable;
+        const hasAction = canInoculate || canHonFuse || canHarvest || canSoak || hasTenchi || hasWatering || hasMoth || hasBeetle;
 
         let qualityBadge = '';
         if (log.quality) {
@@ -175,7 +187,7 @@ function renderLogs() {
         else if (log.stage === 'maturing') status = '🌱 菌まわり中';
         else if (log.restDays > 0) status = `😴 休養 残${log.restDays}日`;
         else if (log.soaking) status = '💧 浸水中';
-        else if (mature > 0) status = `🍄 ${mature}個収穫可`;
+        else if (mature > 0) status = `🍄‍🟫 ${mature}個収穫可`;
         else if (sprouts > 0) status = `🌱 ${sprouts}個成長中`;
         else status = '待機中';
 
@@ -190,11 +202,19 @@ function renderLogs() {
                 const m = log.mushrooms[i];
                 if (m) {
                     if (m.stage === 'sprout') {
-                        const icon = m.isContaminated ? '🦠' : '<span style="font-size:0.8rem">🍄‍🟫</span>';
+                        // 保存されたアイコンがあれば使用、なければランダムで決定して保存
+                        if (m.isContaminated && !m.contaminatedIcon) {
+                            m.contaminatedIcon = Math.random() < 0.5 ? '🦠' : '🍄';
+                        }
+                        const icon = m.isContaminated ? m.contaminatedIcon : '<span style="font-size:0.8rem">🍄‍🟫</span>';
                         slots.push(`<div class="mushroom-slot sprout">${icon}</div>`);
                     } else {
                         if (m.isContaminated || m.type === 'contaminated') {
-                            slots.push(`<div class="mushroom-slot mature contaminated" onclick="harvestMushroom(${log.id}, ${i}, event)">🦠</div>`);
+                            // 保存されたアイコンがあれば使用、なければランダムで決定して保存
+                            if (!m.contaminatedIcon) {
+                                m.contaminatedIcon = Math.random() < 0.5 ? '🦠' : '🍄';
+                            }
+                            slots.push(`<div class="mushroom-slot mature contaminated" onclick="harvestMushroom(${log.id}, ${i}, event)">${m.contaminatedIcon}</div>`);
                         } else {
                             const cls = m.type === 'large' ? 'large' : m.type === 'deformed' ? 'deformed' : '';
                             slots.push(`<div class="mushroom-slot mature ${cls}" onclick="harvestMushroom(${log.id}, ${i}, event)">🍄‍🟫</div>`);
@@ -251,14 +271,16 @@ function renderLogActions(log, mature, season) {
     if (log.stage === 'maturing') {
         if (log.wateringAvailable) return `<button class="btn btn-water btn-small" onclick="doWatering(${log.id})">💦 散水（残${log.wateringDeadline - gameState.day}日）</button>`;
         if (log.tenchiAvailable) return `<button class="btn btn-harvest btn-small" onclick="doTenchi(${log.id})">🔄 天地返し（残${log.tenchiDeadline - gameState.day}日）</button>`;
-        if (log.pestAvailable) return `<button class="btn btn-primary btn-small" onclick="removePest(${log.id})">🐛 取り除く（残${log.pestDeadline - gameState.day}日）</button>`;
-        return `<span style="font-size:0.75rem;color:#81c784;">菌まわり中...(天地${log.tenchiCount || 0}/2)${log.wateringPenalty ? ` 品質-${log.wateringPenalty}%` : ''}</span>`;
+        if (log.mothAvailable) return `<button class="btn btn-primary btn-small" onclick="removeMoth(${log.id})">🦋 ${log.mothType}を取り除く（残${log.mothDeadline - gameState.day}日）</button>`;
+        if (log.beetleAvailable) return `<button class="btn btn-primary btn-small" onclick="removeBeetle(${log.id})">🪲 ユミアシゴミムシダマシを取り除く（残${log.beetleDeadline - gameState.day}日）</button>`;
+        return `<span style="font-size:0.75rem;color:#81c784;">菌まわり中...(天地${log.tenchiCount || 0}/2)${log.wateringPenalty ? ` 品質-${log.wateringPenalty}%` : ''}${log.beetlePenalty ? ` 甲虫-${log.beetlePenalty}%` : ''}</span>`;
     }
     if (log.stage === 'active' && log.restDays === 0) {
-        if (log.pestAvailable) return `<button class="btn btn-primary btn-small" onclick="removePest(${log.id})">🐛 取り除く（残${log.pestDeadline - gameState.day}日）</button>`;
+        if (log.mothAvailable) return `<button class="btn btn-primary btn-small" onclick="removeMoth(${log.id})">🦋 ${log.mothType}を取り除く（残${log.mothDeadline - gameState.day}日）</button>`;
+        if (log.beetleAvailable) return `<button class="btn btn-primary btn-small" onclick="removeBeetle(${log.id})">🪲 ユミアシゴミムシダマシを取り除く（残${log.beetleDeadline - gameState.day}日）</button>`;
         if (log.wateringAvailable) return `<button class="btn btn-water btn-small" onclick="doSummerWatering(${log.id})">💦 散水（残${log.wateringDeadline - gameState.day}日）</button>`;
         if (log.tenchiAvailable) return `<button class="btn btn-harvest btn-small" onclick="doSummerTenchi(${log.id})">🔄 天地返し（残${log.tenchiDeadline - gameState.day}日）</button>`;
-        // 浸水は、浸水中でない＆夏以外＆椎茸がない場合のみ可能
+        // 浸水は、浸水中でない＆夏以外＆椎茸がない場合のみ可能（soaked条件を削除）
         const hasMushrooms = log.mushrooms && log.mushrooms.length > 0;
         const canSoak = !log.soaking && !season.isSummer && !hasMushrooms;
         return `

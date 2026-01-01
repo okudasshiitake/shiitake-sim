@@ -1,0 +1,4100 @@
+:root {
+    --color-bg: #1a1f16;
+    --color-panel: rgba(47, 55, 40, 0.85);
+    --color-green: #7cb342;
+    --color-brown: #8d6e63;
+    --color-gold: #ffc107;
+    --color-water: #4fc3f7;
+    --color-purple: #ab47bc;
+    --color-text: #e8f5e9;
+    --color-muted: #81c784;
+    --gradient-forest: linear-gradient(135deg, #2e7d32, #1b5e20);
+    --gradient-gold: linear-gradient(135deg, #ffc107, #ff9800);
+    --radius: 12px;
+}
+
+/* 季節ごとの背景 */
+body.season-spring {
+    background: linear-gradient(180deg, #fce4ec 0%, #f8bbd0 50%, #c8e6c9 100%);
+}
+
+body.season-spring::before {
+    content: '🌸';
+    position: fixed;
+    top: 10%;
+    right: 5%;
+    font-size: 3rem;
+    opacity: 0.3;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatSeason 6s ease-in-out infinite;
+}
+
+body.season-spring::after {
+    content: '🌷🌸🌺';
+    position: fixed;
+    bottom: 15%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatSeason 8s ease-in-out infinite reverse;
+}
+
+body.season-growth {
+    background: linear-gradient(180deg, #a5d6a7 0%, #66bb6a 50%, #43a047 100%);
+}
+
+body.season-growth::before {
+    content: '🌱';
+    position: fixed;
+    top: 10%;
+    right: 5%;
+    font-size: 3rem;
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatSeason 6s ease-in-out infinite;
+}
+
+body.season-growth::after {
+    content: '🌿🌱🍀';
+    position: fixed;
+    bottom: 15%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatSeason 8s ease-in-out infinite reverse;
+}
+
+body.season-summer {
+    background: linear-gradient(180deg, #81d4fa 0%, #4fc3f7 30%, #43a047 100%);
+}
+
+body.season-summer::before {
+    content: '☀️';
+    position: fixed;
+    top: 8%;
+    right: 8%;
+    font-size: 4rem;
+    opacity: 0.4;
+    z-index: -1;
+    pointer-events: none;
+    animation: rotateSun 20s linear infinite;
+}
+
+body.season-summer::after {
+    content: '🌻🌴🍉';
+    position: fixed;
+    bottom: 12%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.season-autumn {
+    background: linear-gradient(180deg, #ffcc80 0%, #ff9800 30%, #795548 100%);
+}
+
+body.season-autumn::before {
+    content: '🍂';
+    position: fixed;
+    top: 15%;
+    right: 10%;
+    font-size: 3rem;
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
+    animation: fallLeaf 8s ease-in-out infinite;
+}
+
+body.season-autumn::after {
+    content: '🍁🌰🍄‍🟫';
+    position: fixed;
+    bottom: 10%;
+    left: 5%;
+    font-size: 2rem;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.season-winter {
+    background: linear-gradient(180deg, #ffffff 0%, #e3f2fd 30%, #b3e5fc 70%, #81d4fa 100%);
+}
+
+body.season-winter::before {
+    content: '❄️';
+    position: fixed;
+    top: 10%;
+    right: 8%;
+    font-size: 3rem;
+    opacity: 0.4;
+    z-index: -1;
+    pointer-events: none;
+    animation: snowfall 5s ease-in-out infinite;
+}
+
+body.season-winter::after {
+    content: '⛄❄️🎄';
+    position: fixed;
+    bottom: 12%;
+    left: 5%;
+    font-size: 2.5rem;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes floatSeason {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(5deg);
+    }
+}
+
+@keyframes rotateSun {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fallLeaf {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(10px) rotate(15deg);
+    }
+
+    75% {
+        transform: translateY(-5px) rotate(-10deg);
+    }
+}
+
+@keyframes snowfall {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: translateY(10px);
+        opacity: 0.2;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ダブルタップズーム防止（スマホ・タブレット対応） */
+button,
+.btn,
+.btn-sticky,
+.btn-sort,
+.btn-action,
+.btn-primary,
+.btn-secondary,
+.btn-auto {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+.glass-panel {
+    background: var(--color-panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+}
+
+.app-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 15px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー */
+.header {
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 900;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    height: 1.5em;
+    width: auto;
+    vertical-align: middle;
+}
+
+.player-rank {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--color-gold);
+    font-size: 0.85rem;
+}
+
+.rank-badge {
+    font-size: 1.2rem;
+}
+
+.rank-name {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.exp-bar {
+    width: 60px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.exp-fill {
+    height: 100%;
+    background: var(--gradient-gold);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+/* ステータスバー - 大きく見やすく */
+.status-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 15px;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.status-icon {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.status-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-gold);
+}
+
+.status-label {
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    margin-top: 2px;
+}
+
+/* 猫と従業員の名前表示 */
+.status-label.cat-name,
+.status-label.worker-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 設備名の表示（変更不可） */
+.status-label.equipment-name {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+/* シーズン案内 */
+.season-notice {
+    position: relative;
+    padding: 10px 35px 10px 15px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    display: none;
+    font-weight: 500;
+}
+
+.season-notice.active {
+    display: block;
+}
+
+/* チュートリアル中はシーズン通知を暗くする */
+body:has(.tutorial-overlay) .season-notice {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.notice-close {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    opacity: 0.9;
+    padding: 2px 6px;
+    line-height: 1;
+    background: rgba(50, 50, 50, 0.9);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.notice-close:hover {
+    opacity: 1;
+    background: rgba(80, 80, 80, 1);
+}
+
+.season-notice.glass-panel.active.inoculation {
+    background: rgba(30, 80, 140, 0.98);
+    border: 2px solid #64b5f6;
+    color: #fff;
+}
+
+.season-notice.glass-panel.active.inoculation strong {
+    color: #bbdefb;
+}
+
+.season-notice.glass-panel.active.summer {
+    background: rgba(30, 80, 120, 0.98);
+    border: 2px solid #4fc3f7;
+    color: #fff;
+}
+
+.season-notice.glass-panel.active.summer strong {
+    color: #b3e5fc;
+}
+
+/* コントロール */
+.control-panel {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.control-left,
+.control-right {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.control-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.control-right .btn {
+    flex: 1;
+    max-width: 150px;
+    justify-content: center;
+}
+
+.btn-with-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.btn-count {
+    font-size: 0.65rem;
+    color: var(--color-muted);
+}
+
+/* ボタン */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--gradient-forest);
+    color: white;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-add {
+    background: linear-gradient(135deg, var(--color-brown), #5d4037);
+    color: white;
+}
+
+.btn-harvest {
+    background: var(--gradient-gold);
+    color: #1a1f16;
+}
+
+.btn-water {
+    background: linear-gradient(135deg, var(--color-water), #29b6f6);
+    color: #1a1f16;
+}
+
+.btn-shop {
+    background: linear-gradient(135deg, var(--color-purple), #7b1fa2);
+    color: white;
+}
+
+.btn-pack {
+    background: linear-gradient(135deg, #ff7043, #e64a19);
+    color: white;
+}
+
+.btn-tenchi {
+    background: linear-gradient(135deg, #ba68c8, #9c27b0);
+    color: white;
+}
+
+/* 害虫駆除ボタン */
+.btn-pest {
+    background: linear-gradient(135deg, #f06292, #e91e63);
+    color: white;
+}
+
+.btn-batch {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-text);
+}
+
+.btn-auto {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+    min-width: 70px;
+}
+
+.btn-auto.active {
+    background: var(--gradient-forest);
+    color: white;
+}
+
+.btn-large {
+    padding: 12px 30px;
+    font-size: 1rem;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* 在庫バー */
+.inventory-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 15px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.inv-label {
+    color: var(--color-muted);
+}
+
+.inv-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.inv-item strong {
+    color: var(--color-gold);
+    margin-left: 3px;
+}
+
+.inv-total {
+    background: var(--gradient-gold);
+    color: #1a1f16;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.inv-days {
+    color: #ff7043;
+    font-size: 0.8rem;
+}
+
+/* 原木セクション */
+.logs-section {
+    flex: 1;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.section-header h2 {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-header h2 span {
+    color: var(--color-muted);
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+
+.logs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    min-height: 200px;
+}
+
+.empty-state {
+    grid-column: 1/-1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+    color: var(--color-muted);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.empty-hint {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-top: 5px;
+}
+
+/* 原木カード - 大きめ */
+.log-card {
+    background: var(--color-panel);
+    border-radius: var(--radius);
+    padding: 15px;
+    border: 2px solid transparent;
+    transition: 0.3s;
+    position: relative;
+}
+
+.log-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.log-card.has-mushrooms {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+}
+
+.log-card.resting {
+    opacity: 0.6;
+}
+
+.log-card.resting::after {
+    content: '😴 休養中';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+/* 原木ステータス */
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.log-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    padding: 2px;
+    transition: 0.2s;
+}
+
+.btn-delete:hover {
+    opacity: 1;
+}
+
+.log-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.log-quality {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.log-quality.good {
+    background: #4caf50;
+    color: white;
+}
+
+.log-quality.normal {
+    background: #9e9e9e;
+    color: white;
+}
+
+.log-quality.contaminated {
+    background: #ff9800;
+    color: white;
+}
+
+.log-quality.failed {
+    background: #f44336;
+    color: white;
+}
+
+.log-status {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-bottom: 10px;
+}
+
+/* 品質確率バー */
+.quality-bar {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.quality-good {
+    background: #4caf50;
+}
+
+.quality-normal {
+    background: #9e9e9e;
+}
+
+.quality-contaminated {
+    background: #ff9800;
+}
+
+.quality-failed {
+    background: #f44336;
+}
+
+.quality-legend {
+    font-size: 0.6rem;
+    color: var(--color-muted);
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+/* 原木ビジュアル - 大きく */
+.log-visual {
+    background: url('image2.png') center center / cover no-repeat;
+    border-radius: 8px;
+    min-height: 100px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.log-visual.soaking {
+    background: url('image2.png') center center / cover no-repeat;
+    filter: brightness(0.9) saturate(0.8) hue-rotate(180deg);
+}
+
+.log-visual.fuse {
+    background: url('image2.png') center center / cover no-repeat;
+    filter: brightness(0.85) grayscale(0.3);
+}
+
+/* 椎茸表示 - 原木上に直接 */
+.mushroom-grid {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 3px;
+}
+
+.mushroom-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: 0.2s;
+    border-radius: 4px;
+}
+
+.mushroom-slot:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.mushroom-slot.sprout {
+    font-size: 1rem;
+    cursor: default;
+}
+
+.mushroom-slot.sprout:hover {
+    transform: none;
+    background: none;
+}
+
+.mushroom-slot.mature {
+    animation: mushroomBounce 2s infinite;
+}
+
+.mushroom-slot.large {
+    font-size: 1.8rem;
+}
+
+.mushroom-slot.deformed {
+    filter: hue-rotate(30deg);
+}
+
+.mushroom-slot.contaminated {
+    filter: grayscale(0.5) sepia(0.5);
+    opacity: 0.8;
+}
+
+.mushroom-slot.overflow {
+    background: rgba(129, 199, 132, 0.2);
+    border: 2px dashed #81c784;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mushroom-slot.overflow:hover {
+    background: rgba(129, 199, 132, 0.4);
+    transform: scale(1.1);
+}
+
+@keyframes mushroomBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+.log-center-text {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+}
+
+/* 原木アクションボタン */
+.log-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.log-actions .btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.75rem;
+    padding: 8px 6px;
+}
+
+/* イベントログ */
+.event-log {
+    padding: 10px;
+    max-height: 120px;
+    margin-top: 10px;
+}
+
+.event-log h3 {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: var(--color-muted);
+}
+
+.log-entries {
+    max-height: 80px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.log-entry {
+    display: flex;
+    gap: 8px;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    border-left: 2px solid var(--color-green);
+}
+
+.log-entry.log-harvest {
+    border-left-color: var(--color-gold);
+}
+
+.log-entry.log-water {
+    border-left-color: var(--color-water);
+}
+
+.log-entry.log-weather {
+    border-left-color: var(--color-purple);
+}
+
+.log-time {
+    color: var(--color-muted);
+    white-space: nowrap;
+}
+
+.log-message {
+    color: #a5d6a7;
+}
+
+/* フッター */
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+
+/* ヘルプボタン */
+.help-button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    cursor: grab;
+    box-shadow: none;
+    z-index: 400000;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    user-select: none;
+    touch-action: none;
+}
+
+.help-button:active {
+    cursor: grabbing;
+}
+
+.help-cat-icon {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    border-radius: 0;
+    pointer-events: none;
+}
+
+/* チュートリアル中の猫（喋っている時）- 拡大 */
+.help-button.help-talking {
+    transform: scale(1.3) !important;
+}
+
+/* チュートリアルのハイライト枠アニメーション - 光の脈動 */
+.tutorial-highlight-border {
+    animation: tutorialPulse 1s ease-in-out infinite !important;
+}
+
+@keyframes tutorialPulse {
+
+    0%,
+    100% {
+        outline-width: 3px;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 10px rgba(76, 175, 80, 0.8);
+        transform: scale(1);
+    }
+
+    50% {
+        outline-width: 8px;
+        outline-offset: 8px;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 40px rgba(76, 175, 80, 1);
+        transform: scale(1.04);
+    }
+}
+
+/* 原木・菌購入ボタンは控えめのアニメーション */
+.shop-item.tutorial-highlight-border {
+    animation: tutorialPulseSmall 1s ease-in-out infinite !important;
+}
+
+@keyframes tutorialPulseSmall {
+
+    0%,
+    100% {
+        outline-width: 3px;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 10px rgba(76, 175, 80, 0.8);
+        transform: scale(1);
+    }
+
+    50% {
+        outline-width: 5px;
+        outline-offset: 4px;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 20px rgba(76, 175, 80, 1);
+        transform: scale(1.02);
+    }
+}
+
+/* ガイド付きチュートリアルの吹き出しスタイル */
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 99999;
+}
+
+.tutorial-message {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    color: #333;
+    padding: 15px 18px 50px 18px;
+    border-radius: 14px;
+    border: 2px solid #4caf50;
+    max-width: 280px;
+    width: calc(100% - 60px);
+    text-align: center;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+    z-index: 100001;
+}
+
+/* 画面中央に表示 */
+.tutorial-message.tutorial-message-center {
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tutorial-message h4 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: #2e7d32;
+}
+
+.tutorial-message p {
+    margin: 0 0 8px 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.tutorial-hint {
+    color: #4caf50;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.tutorial-skip {
+    margin-top: 12px;
+}
+
+/* チュートリアル「次へ」ボタン */
+.tutorial-next {
+    margin-top: 10px;
+}
+
+.tutorial-step-indicator {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 100001;
+}
+
+/* トースト */
+.toast-container {
+    position: fixed;
+    bottom: 70px;
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 300000;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--color-panel);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    animation: toastIn 0.3s, toastOut 0.3s 2.7s forwards;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toastOut {
+    to {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+}
+
+.harvest-effects {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 300;
+}
+
+.harvest-particle {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: harvestFloat 1s forwards;
+}
+
+@keyframes harvestFloat {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-60px);
+    }
+}
+
+.money-particle {
+    position: absolute;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    animation: harvestFloat 1.2s forwards;
+}
+
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 200000;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+/* 本伏せチュートリアルモーダルを最前面に */
+#honfuseTutorialModal.active {
+    z-index: 300000;
+}
+
+.modal-content {
+    max-width: 450px;
+    width: 100%;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s;
+}
+
+.modal-content.modal-large {
+    max-width: 550px;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+/* チュートリアル */
+.tutorial-content {
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.tutorial-section {
+    margin-bottom: 12px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.tutorial-section h4 {
+    color: var(--color-gold);
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.tutorial-section ul,
+.tutorial-section ol {
+    font-size: 0.85rem;
+    padding-left: 20px;
+    color: #a5d6a7;
+}
+
+.tutorial-section li {
+    padding: 2px 0;
+}
+
+/* ヘルプモーダル */
+.help-content {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.help-content p {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.help-content ul {
+    padding-left: 20px;
+    color: #a5d6a7;
+    font-size: 0.85rem;
+}
+
+.help-content li {
+    padding: 3px 0;
+}
+
+.help-content strong {
+    color: var(--color-gold);
+}
+
+/* ショップ */
+.shop-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 5px;
+    /* スクロールバーのスペース確保 */
+}
+
+.shop-tab {
+    flex: 1 0 auto;
+    min-width: 90px;
+    padding: 8px 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    border-radius: 6px;
+    color: var(--color-muted);
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.shop-tab.active {
+    background: var(--gradient-forest);
+    color: white;
+}
+
+.shop-items {
+    display: grid;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.shop-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 2px solid transparent;
+}
+
+.shop-item:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.shop-item.owned {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.shop-item-icon {
+    font-size: 1.5rem;
+}
+
+.shop-item-info {
+    flex: 1;
+}
+
+.shop-item-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.shop-item-desc {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+.shop-item-price {
+    font-weight: 700;
+    color: var(--color-gold);
+    font-size: 0.9rem;
+    min-width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.shop-item-stock {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+/* 植菌/仮伏せ/本伏せ */
+.inoculate-info,
+.fuse-info {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.inoculate-info p,
+.fuse-info p {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* パック詰め */
+.packing-info {
+    text-align: center;
+    margin-bottom: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.packing-stock {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.stock-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stock-row:last-child {
+    border-bottom: none;
+}
+
+.stock-total {
+    font-weight: 600;
+    padding-top: 8px;
+    margin-top: 5px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stock-total span:last-child {
+    color: var(--color-gold);
+    font-size: 1.1rem;
+}
+
+/* まとめて管理 */
+.batch-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.batch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.batch-info {
+    font-size: 0.9rem;
+    color: #ccc;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.batch-actions .btn {
+    min-width: 120px;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* スマホ用レスポンシブ */
+@media (max-width: 480px) {
+    .batch-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .batch-info {
+        white-space: normal;
+        text-align: center;
+        font-size: 0.85rem;
+    }
+
+    .batch-actions .btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+.batch-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.batch-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+}
+
+.batch-item input {
+    width: 18px;
+    height: 18px;
+}
+
+.batch-item-name {
+    flex: 1;
+}
+
+.batch-item-status {
+    color: var(--color-muted);
+    font-size: 0.8rem;
+}
+
+/* 実績ポップアップ */
+.achievement-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 400;
+    pointer-events: none;
+}
+
+.achievement-popup.active {
+    animation: achievementPop 2.5s forwards;
+}
+
+@keyframes achievementPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    15% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    25%,
+    75% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+}
+
+.achievement-popup-content {
+    background: var(--gradient-gold);
+    border-radius: var(--radius);
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+}
+
+.achievement-popup-icon {
+    font-size: 2rem;
+}
+
+.achievement-popup-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.achievement-popup-title {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.achievement-popup-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1f16;
+}
+
+/* スクロールバー */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #558b2f;
+    border-radius: 3px;
+}
+
+/* レスポンシブ */
+@media (max-width: 600px) {
+    .logo {
+        font-size: 1.3rem;
+    }
+
+    .control-panel {
+        flex-direction: column;
+    }
+
+    .control-left,
+    .control-right {
+        justify-content: center;
+    }
+
+    .logs-container {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ゲーム終了モーダル */
+.game-over-modal {
+    text-align: center;
+}
+
+.game-over-modal h2 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.game-over-subtitle {
+    color: var(--color-muted);
+    margin-bottom: 20px;
+}
+
+.score-section {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.score-section h3 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: var(--color-gold);
+}
+
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.score-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.score-label {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    display: block;
+    margin-bottom: 3px;
+}
+
+.score-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-gold);
+}
+
+.score-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.share-section {
+    margin-bottom: 15px;
+}
+
+.share-section h4 {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin-bottom: 10px;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-twitter {
+    background: #000;
+    color: white;
+}
+
+.btn-twitter span {
+    font-weight: 700;
+}
+
+.btn-instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+}
+
+.btn-copy {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-text);
+}
+
+/* 植菌ミニゲーム */
+.inoculate-game {
+    text-align: center;
+}
+
+.game-instruction {
+    color: var(--color-muted);
+    margin-bottom: 10px;
+}
+
+.game-progress {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin-bottom: 15px;
+}
+
+.log-game-area {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background: url('image2.png') center/100% 100% no-repeat;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.game-log {
+    font-size: 4rem;
+    opacity: 0;
+    display: none;
+}
+
+.game-holes {
+    position: absolute;
+    top: 45%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    height: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+}
+
+.game-hole {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #5d4037;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    animation: holeAppear 0.3s ease-out;
+}
+
+.game-hole.filled {
+    background: #ff9800;
+    animation: holeFill 0.3s ease-out;
+}
+
+@keyframes holeAppear {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes holeFill {
+    0% {
+        transform: scale(1.3);
+        background: #aed581;
+    }
+
+    100% {
+        transform: scale(1);
+        background: #7cb342;
+    }
+}
+
+#tapButton {
+    min-width: 200px;
+    font-size: 1.2rem;
+    padding: 15px 40px;
+    transition: transform 0.1s;
+}
+
+#tapButton:active {
+    transform: scale(0.95);
+}
+
+/* 猫イベント */
+.cat-modal {
+    text-align: center;
+}
+
+.cat-visual {
+    font-size: 4rem;
+    margin: 15px 0;
+    animation: catBounce 1s ease-in-out infinite;
+}
+
+@keyframes catBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.cat-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.cat-info p {
+    margin: 5px 0;
+}
+
+.cat-status {
+    background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+
+.cat-icon {
+    font-size: 1.5rem;
+    animation: catWiggle 2s ease-in-out infinite;
+}
+
+@keyframes catWiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-5deg);
+    }
+
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+/* ランクコメント */
+.rank-comment {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.rank-comment p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* 赤丸通知アイコン */
+.notify-badge {
+    position: relative;
+}
+
+.notify-badge::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 10px;
+    height: 10px;
+    background: #ff4444;
+    border-radius: 50%;
+    animation: notifyPulse 1s ease-in-out infinite;
+}
+
+@keyframes notifyPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+.help-button:hover {
+    transform: scale(1.1);
+}
+
+/* チュートリアルオーバーレイ */
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.tutorial-highlight {
+    position: absolute;
+    border: 4px solid #4caf50;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.8);
+    animation: tutorialGlow 1s ease-in-out infinite;
+    background: transparent;
+    pointer-events: none;
+}
+
+@keyframes tutorialGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4), 0 0 20px rgba(76, 175, 80, 0.8);
+    }
+
+    50% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4), 0 0 40px rgba(76, 175, 80, 1);
+    }
+}
+
+.tutorial-message {
+    background: #ffffff;
+    color: #333;
+    padding: 12px 18px;
+    border-radius: 12px;
+    max-width: 240px;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 2px solid #4caf50;
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100001;
+    pointer-events: auto;
+}
+
+/* スマホ用：チュートリアルメッセージを幅広く */
+@media (max-width: 600px) {
+    .tutorial-message {
+        max-width: 85%;
+        width: 85%;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        bottom: 15px;
+    }
+
+    .tutorial-message h4 {
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .tutorial-message p {
+        margin: 4px 0;
+        font-size: 0.8rem;
+        display: block;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+    .tutorial-hint {
+        font-size: 0.75rem !important;
+        display: block;
+        margin-top: 6px;
+    }
+
+    .tutorial-skip {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        margin-top: 8px;
+    }
+}
+
+/* ターゲット要素自体に緑枠を適用（ガクガク防止用） */
+.tutorial-highlight-border {
+    outline-style: solid !important;
+    outline-color: #4caf50 !important;
+    outline-width: 3px !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 10px rgba(76, 175, 80, 0.8) !important;
+    animation: tutorialPulse 0.8s ease-in-out infinite !important;
+    z-index: 100000 !important;
+    position: relative !important;
+}
+
+/* チュートリアル中はモーダル内のoverflowを見せる（緑枠のアニメーション用） */
+.modal:has(.tutorial-highlight-border) .modal-content,
+.modal:has(.tutorial-highlight-border) .glass-panel,
+.modal:has(.tutorial-highlight-border) .shop-items,
+.modal:has(.tutorial-highlight-border) .shop-tabs {
+    overflow: visible !important;
+}
+
+/* ただしチュートリアルモーダル自体はスクロール可能のまま */
+#tutorialModal .modal-content {
+    overflow-y: auto !important;
+}
+
+/* 販売モーダルもチュートリアル中にスクロール可能に */
+#packingModal .modal-content {
+    overflow-y: auto !important;
+}
+
+/* ショップモーダルもチュートリアル中にスクロール可能に */
+#shopModal .modal-content {
+    overflow-y: auto !important;
+}
+
+/* ショップモーダルの閉じるボタン */
+.shop-modal-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shop-modal-actions .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* チュートリアル中はモーダル内のボタンがクリック可能に */
+.tutorial-highlight-border {
+    pointer-events: auto !important;
+}
+
+/* 販売モーダルをスクロール可能に */
+#packingModal.active {
+    overflow-y: auto;
+}
+
+#packingModal .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: 20px auto;
+}
+
+/* スマホ用：販売モーダルのスクロールを改善 */
+@media (max-width: 600px) {
+    #packingModal .modal-content {
+        max-height: 85vh;
+        overflow-y: auto;
+        margin: 10px;
+    }
+
+    /* モーダルが開いている時は背景のスクロールを止める */
+    body:has(.modal.active) {
+        overflow: hidden;
+    }
+}
+
+/* tutorialPulse は 964行目で定義済み */
+
+.tutorial-message h4 {
+    font-size: 1.1rem;
+    color: #2e7d32;
+}
+
+.tutorial-message p {
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+    font-size: 0.85rem;
+    color: #444;
+}
+
+.tutorial-skip {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    padding: 6px 16px;
+    color: #333;
+    background: #e0e0e0;
+    border: 1px solid #bbb;
+}
+
+.tutorial-hint {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin: 10px 0 0 0;
+    animation: hintPulse 1s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* スマホ用にチュートリアルメッセージを小さく */
+@media (max-width: 480px) {
+    .tutorial-message {
+        max-width: 200px;
+        padding: 10px 14px;
+        bottom: 60px;
+    }
+
+    .tutorial-message h4 {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-message p {
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-skip {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+        margin-top: 8px;
+    }
+
+    .tutorial-hint {
+        font-size: 0.8rem;
+    }
+}
+
+.tutorial-step-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.tutorial-complete {
+    max-width: 380px;
+}
+
+.tutorial-complete h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.5rem;
+    color: #2e7d32;
+}
+
+.tutorial-complete ul {
+    padding-left: 20px;
+}
+
+.tutorial-complete li {
+    margin: 8px 0;
+    color: #555;
+}
+
+.tutorial-arrow {
+    font-size: 3rem;
+    color: #ffeb3b;
+    animation: arrowBounce 0.5s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* 植菌ゲーム木タップ */
+.log-game-area {
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.log-game-area:active {
+    transform: scale(0.95);
+}
+
+.game-hint {
+    text-align: center;
+    color: #81c784;
+    font-size: 1rem;
+    margin-top: 10px;
+    animation: arrowBounce 0.5s ease-in-out infinite;
+}
+
+/* まとめて管理追加ボタン */
+.batch-actions-extra {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.batch-actions-extra .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.batch-status {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* 統計ダッシュボード */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.stats-details {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.stats-details h4 {
+    margin-bottom: 10px;
+    color: #81c784;
+}
+
+.harvest-breakdown {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+/* 設備アイコン */
+.equipment-status {
+    padding: 5px 10px;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(56, 142, 60, 0.3));
+    border-radius: 8px;
+    border: 1px solid rgba(76, 175, 80, 0.5);
+}
+
+.equipment-icon {
+    font-size: 1.2rem;
+}
+
+.batch-status p {
+    margin: 5px 0;
+}
+
+/* 原木カードの赤丸バッジ */
+.log-action-badge {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #f44336;
+    border-radius: 50%;
+    animation: pulseBadge 1s ease-in-out infinite;
+    margin-right: 5px;
+}
+
+@keyframes pulseBadge {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* 植菌ミニゲームの穴 */
+.game-hole {
+    font-size: 1.5rem;
+    color: #888;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.game-hole.filled {
+    color: #ff9800;
+    text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+    animation: holeFilled 0.3s ease-out;
+}
+
+@keyframes holeFilled {
+    0% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* チュートリアルターゲット要素 */
+.tutorial-target {
+    z-index: 10000 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+    animation: targetPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes targetPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* 難易度選択 */
+.difficulty-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.difficulty-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.difficulty-option:hover {
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.difficulty-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+}
+
+.difficulty-label {
+    font-weight: 500;
+}
+
+.difficulty-money {
+    color: #4caf50;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.difficulty-scale {
+    font-size: 0.7rem;
+    color: #888;
+    margin-right: 10px;
+}
+
+.custom-money-input {
+    width: 80px;
+    padding: 5px 8px;
+    border: 1px solid #4caf50;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+/* スマホ用難易度オプション（横1行表示） */
+@media (max-width: 480px) {
+    .difficulty-option {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .difficulty-label {
+        font-size: 0.85rem;
+    }
+
+    .difficulty-scale {
+        font-size: 0.6rem;
+        margin-right: 5px;
+    }
+
+    .difficulty-money {
+        font-size: 0.85rem;
+    }
+
+    .custom-money-input {
+        width: 70px;
+        padding: 4px 6px;
+        font-size: 0.8rem;
+    }
+}
+
+/* 保険文言・著作権表示 */
+.help-disclaimer {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: #aaa;
+    text-align: center;
+}
+
+.help-disclaimer p {
+    margin: 5px 0;
+}
+
+/* ============================
+   レスポンシブデザイン
+   ============================ */
+
+/* タブレット (768px以下) */
+@media screen and (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    .modal-large {
+        max-width: 95%;
+    }
+
+    .shop-items {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-item {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .shop-item-icon {
+        font-size: 1.2rem;
+        min-width: 30px;
+    }
+
+    .shop-item-name {
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .shop-item-desc {
+        font-size: 0.65rem;
+    }
+
+    .shop-item-price {
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .batch-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* スマホ (480px以下) */
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 12px;
+    }
+
+    .game-container {
+        padding: 3px;
+    }
+
+    .header h1 {
+        font-size: 1rem;
+    }
+
+    .status-bar {
+        flex-wrap: wrap;
+        gap: 3px;
+    }
+
+    .status-item {
+        padding: 3px 5px;
+        font-size: 0.65rem;
+    }
+
+    .control-panel {
+        gap: 3px;
+        flex-wrap: wrap;
+    }
+
+    .control-panel .btn {
+        font-size: 0.6rem;
+        padding: 5px 6px;
+    }
+
+    .log-card {
+        padding: 6px;
+    }
+
+    .log-actions {
+        gap: 3px;
+    }
+
+    .log-actions .btn {
+        font-size: 0.55rem;
+        padding: 3px 5px;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 320px;
+        padding: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .footer {
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .btn-link {
+        font-size: 0.75rem;
+        padding: 5px 8px;
+    }
+
+    /* チュートリアルメッセージ */
+    .tutorial-message {
+        max-width: 200px;
+        padding: 10px 14px;
+        bottom: 60px;
+    }
+
+    .tutorial-message h4 {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-message p {
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+    }
+
+    .tutorial-skip {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+        margin-top: 8px;
+    }
+
+    .tutorial-hint {
+        font-size: 0.8rem;
+    }
+
+    /* 統計ダッシュボード */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-icon {
+        font-size: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+
+    /* ヘルプボタン */
+    .help-button {
+        width: 80px;
+        height: 80px;
+        bottom: 0;
+        right: 0;
+    }
+
+    /* 原木を横2列表示（スマホ用） */
+    .logs-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+    }
+
+    /* コンパクトなカードレイアウト */
+    .log-card {
+        padding: 4px 6px;
+        border-radius: 6px;
+    }
+
+    .log-header {
+        margin-bottom: 2px;
+    }
+
+    .log-name {
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .log-header-right {
+        gap: 3px;
+    }
+
+    .log-quality {
+        font-size: 0.55rem;
+        padding: 1px 3px;
+    }
+
+    .btn-delete {
+        font-size: 0.65rem;
+        padding: 1px;
+    }
+
+    .btn-sell {
+        font-size: 0.6rem;
+    }
+
+    .log-status {
+        font-size: 0.6rem;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* 品質バー */
+    .quality-bar {
+        height: 4px;
+        margin-bottom: 2px;
+    }
+
+    .quality-legend {
+        font-size: 0.5rem;
+        margin-bottom: 3px;
+    }
+
+    /* 原木ビジュアルを小さく */
+    .log-visual {
+        min-height: 55px;
+        max-height: 55px;
+        margin-bottom: 3px;
+        border-radius: 4px;
+    }
+
+    .mushroom-grid {
+        gap: 1px;
+    }
+
+    .mushroom-slot {
+        font-size: 0.85rem;
+        border-radius: 2px;
+    }
+
+    .mushroom-slot.sprout span {
+        font-size: 0.7rem !important;
+    }
+
+    .log-center-text {
+        font-size: 0.6rem;
+    }
+
+    /* アクションボタン */
+    .log-actions {
+        gap: 2px;
+    }
+
+    .log-actions .btn {
+        font-size: 0.55rem;
+        padding: 3px 4px;
+        border-radius: 4px;
+    }
+
+    /* 穴あけゲームモーダルをコンパクトに */
+    .inoculate-game {
+        padding: 8px !important;
+    }
+
+    .inoculate-game h3 {
+        font-size: 0.9rem;
+        margin-bottom: 5px !important;
+    }
+
+    .game-instruction {
+        font-size: 0.75rem;
+        margin-bottom: 5px;
+    }
+
+    .game-progress {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .log-game-area {
+        height: 170px;
+        margin-bottom: 5px;
+        border-radius: 8px;
+    }
+
+    .game-holes {
+        height: 70px;
+        gap: 4px;
+        padding: 5px;
+    }
+
+    .game-hole {
+        width: 18px;
+        height: 18px;
+        font-size: 0.65rem;
+    }
+
+    .game-hint {
+        font-size: 0.8rem;
+        margin-top: 3px;
+    }
+}
+
+/* 小さいスマホ用のさらにコンパクトな表示 */
+@media (max-width: 400px) {
+    .app-container {
+        padding: 8px;
+    }
+
+    .header {
+        padding: 8px;
+        margin-bottom: 6px;
+    }
+
+    .logo {
+        font-size: 1.1rem !important;
+        gap: 4px !important;
+    }
+
+    .logo-icon {
+        height: 1.2em !important;
+    }
+
+    .player-rank {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        margin-top: 4px;
+    }
+
+    .status-bar {
+        padding: 8px;
+        gap: 8px;
+        font-size: 0.8rem;
+    }
+
+    .season-notice {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .control-bar {
+        padding: 6px;
+        gap: 4px;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .btn-small {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+
+    /* さらにコンパクトな原木カード */
+    .log-card {
+        padding: 3px 5px;
+    }
+
+    .log-name {
+        font-size: 0.65rem;
+    }
+
+    .log-status {
+        font-size: 0.55rem;
+    }
+
+    .log-visual {
+        min-height: 45px;
+        max-height: 45px;
+    }
+
+    .mushroom-slot {
+        font-size: 0.75rem;
+    }
+
+    .log-actions .btn {
+        font-size: 0.5rem;
+        padding: 2px 3px;
+    }
+
+    .inventory-bar {
+        padding: 8px;
+        font-size: 0.75rem;
+    }
+
+    .footer {
+        padding: 8px;
+    }
+
+    .footer .btn-link {
+        font-size: 0.7rem;
+        padding: 4px;
+    }
+}
+
+/* 音声ボタンのスタイル */
+.btn-audio {
+    transition: all 0.2s ease;
+}
+
+.btn-audio.active {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.btn-audio:not(.active) {
+    color: var(--color-muted);
+    opacity: 0.7;
+}
+
+/* 販売オプション */
+.sell-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.sell-option {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.sell-option h4 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+}
+
+.sell-option p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.sell-option .sell-note {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-bottom: 10px;
+}
+
+.sell-option .sell-price {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.sell-option .btn {
+    width: 100%;
+}
+
+/* 価格表 */
+.price-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    margin: 10px 0;
+}
+
+.price-table th,
+.price-table td {
+    padding: 4px 6px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.price-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+}
+
+.price-table td:first-child {
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* 3列レイアウト */
+@media (min-width: 600px) {
+    .sell-options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 599px) {
+    .sell-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 在庫表 */
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin: 10px 0;
+}
+
+.inventory-table th,
+.inventory-table td {
+    padding: 4px 8px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inventory-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+}
+
+.inventory-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+/* 難易度選択の説明文 */
+.difficulty-desc {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    display: block;
+    margin-top: 2px;
+}
+
+/* 原木販売ボタン */
+.btn-sell {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    padding: 2px;
+    transition: 0.2s;
+}
+
+.btn-sell:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.btn-sell:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* カスタム金額入力行 */
+.custom-option {
+    flex-wrap: wrap;
+}
+
+.custom-input-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+/* チュートリアルオーバーレイの改行対応 */
+.tutorial-overlay-content {
+    word-break: break-word;
+    white-space: normal;
+    max-width: 280px;
+}
+
+.tutorial-overlay-content p {
+    word-break: break-word;
+    line-height: 1.6;
+}
+
+/* ソートボタン */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.sort-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.btn-sort {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-sort:hover {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: rgba(76, 175, 80, 0.5);
+}
+
+.btn-sort.active {
+    background: var(--color-green);
+    color: white;
+    border-color: var(--color-green);
+}
+
+/* 実績一覧 */
+.achievements-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+.achievement-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s;
+}
+
+.achievement-card.unlocked {
+    background: rgba(76, 175, 80, 0.15);
+    border-color: rgba(76, 175, 80, 0.4);
+}
+
+.achievement-card.locked {
+    opacity: 0.6;
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    min-width: 50px;
+    text-align: center;
+}
+
+.achievement-info {
+    flex: 1;
+}
+
+.achievement-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-bottom: 4px;
+}
+
+.achievement-desc {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-bottom: 4px;
+}
+
+.achievement-reward {
+    font-size: 0.8rem;
+    color: var(--color-gold);
+}
+
+.achievement-status {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+.achievement-card.unlocked .achievement-status {
+    background: rgba(76, 175, 80, 0.3);
+    color: #81c784;
+}
+
+.achievement-card.locked .achievement-status {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-muted);
+}
+
+/* スマホ対応 */
+@media (max-width: 480px) {
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sort-buttons {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .btn-sort {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+    }
+
+    .achievement-card {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .achievement-icon {
+        font-size: 1.5rem;
+        min-width: 40px;
+    }
+
+    .achievement-name {
+        font-size: 0.9rem;
+    }
+
+    .achievement-desc {
+        font-size: 0.75rem;
+    }
+}
+
+/* スティッキーヘッダー */
+.sticky-header {
+    position: fixed;
+    top: -150px;
+    left: 0;
+    right: 0;
+    background: rgba(26, 31, 22, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 9999;
+    transition: top 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sticky-header.visible {
+    top: 0;
+}
+
+.sticky-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+}
+
+.sticky-progress {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    width: 100%;
+}
+
+.sticky-progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease, background 0.3s ease;
+}
+
+.sticky-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--color-text);
+}
+
+.sticky-divider {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.sticky-stock {
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.3s;
+}
+
+.sticky-stock.has-stock {
+    color: var(--color-green);
+    font-weight: bold;
+}
+
+.sticky-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-sticky {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    gap: 2px;
+}
+
+.btn-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.btn-label {
+    font-size: 0.65rem;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.btn-sticky:hover {
+    background: rgba(76, 175, 80, 0.3);
+    border-color: rgba(76, 175, 80, 0.6);
+}
+
+.btn-sticky:active {
+    transform: scale(0.95);
+}
+
+/* 3年間プログレスバー */
+.game-progress-bar {
+    margin: 5px 0 10px 0;
+    padding: 0 5px;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 3px;
+    padding: 0 10px;
+}
+
+.progress-track-seasons {
+    display: flex;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-track-seasons::before,
+.progress-track-seasons::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.progress-track-seasons::before {
+    left: 33.33%;
+}
+
+.progress-track-seasons::after {
+    left: 66.66%;
+}
+
+.season-segment {
+    height: 100%;
+    position: relative;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.season-segment:last-child {
+    border-right: none;
+}
+
+.season-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+/* スマホ対応 */
+@media (max-width: 480px) {
+    .sticky-header {
+        padding: 0;
+    }
+
+    .sticky-main {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 6px 12px;
+        gap: 4px;
+    }
+
+    .sticky-info {
+        font-size: 0.7rem;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .sticky-divider {
+        display: none;
+    }
+
+    .sticky-buttons {
+        justify-content: space-evenly;
+        gap: 6px;
+        padding: 0 8px;
+    }
+
+    .btn-sticky {
+        padding: 5px 10px;
+        font-size: 0.65rem;
+    }
+
+    .sticky-progress {
+        height: 3px;
+    }
+
+    .progress-labels {
+        font-size: 0.5rem;
+    }
+
+    .progress-track {
+        height: 4px;
+    }
+}
+
+/* トーストカウント表示 */
+.toast-count {
+    display: inline-block;
+    background: var(--color-gold);
+    color: #000;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* スマホでチュートリアルボタンの順序を入れ替え */
+@media (max-width: 600px) {
+    .tutorial-actions {
+        flex-direction: column-reverse;
+    }
+}
+
+/* ほだ木置き場セクションヘッダー */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.sort-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.btn-sort {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-sort:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-sort.active {
+    background: var(--color-green);
+    border-color: var(--color-green);
+    color: #fff;
+}
+
+/* Duolingoスタイル: 視認性の高い不透明背景 */
+.inventory-bar {
+    background: rgba(30, 40, 35, 0.85);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+}
+
+.logs-section {
+    background: rgba(30, 40, 35, 0.85);
+    border-radius: var(--radius);
+    padding: 10px;
+}
+
+.section-header h2 {
+    font-weight: 700;
+}
+
+/* プログレスバーに半透明背景 */
+.game-progress-bar {
+    background: rgba(30, 40, 35, 0.8);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    margin-bottom: 10px;
+}
+
+/* フッター（BGM等）に半透明背景 */
+.footer {
+    background: rgba(30, 40, 35, 0.85);
+    border-radius: var(--radius);
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* イベントログにも半透明背景 */
+.event-log {
+    background: rgba(30, 40, 35, 0.8);
+}
+
+/* パネルグループ: 複数のパネルをくっつけて表示 */
+.panel-group {
+    margin-bottom: 10px;
+}
+
+.panel-group .panel-top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.panel-group .panel-bottom {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
+    margin-top: 0;
+    padding-top: 5px;
+}
+
+/* プログレスバーの背景をステータスバーと統一 */
+.game-progress-bar.panel-bottom {
+    background: rgba(47, 55, 40, 0.85);
+    padding: 5px 12px 8px;
+}
+
+/* 在庫バーの背景をコントロールパネルと統一 */
+.inventory-bar.panel-top {
+    background: rgba(47, 55, 40, 0.85);
+    padding: 5px 12px;
+}
+
+/* スマホ用：チュートリアルボタンの順序変更 */
+@media (max-width: 600px) {
+    .modal-actions.tutorial-actions {
+        display: flex !important;
+        flex-direction: column-reverse !important;
+        gap: 10px !important;
+    }
+}
+
+/* チュートリアル中はpanel-groupのoverflowを解除して緑枠を表示 */
+.panel-group:has(.tutorial-highlight-border),
+.panel-group:has(.tutorial-target) {
+    overflow: visible !important;
+    z-index: 99999 !important;
+}
+
+/* チュートリアル中は在庫バーのz-indexを下げて緑枠を隠さないようにする */
+body:has(.tutorial-highlight-border) .inventory-bar,
+body:has(.tutorial-target) .inventory-bar {
+    z-index: auto !important;
+    position: relative !important;
+}
+
+/* チュートリアル中はコントロールパネルのoverflowを解除 */
+body:has(.tutorial-highlight-border) .control-panel,
+body:has(.tutorial-target) .control-panel {
+    overflow: visible !important;
+}
+
+/* モーダル内のボタンに緑枠を適用する場合（背景を暗くしない版） */
+.modal .tutorial-highlight-border {
+    outline-style: solid !important;
+    outline-color: #4caf50 !important;
+    outline-width: 3px !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.8) !important;
+    animation: tutorialPulseModal 0.8s ease-in-out infinite !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+@keyframes tutorialPulseModal {
+
+    0%,
+    100% {
+        outline-width: 3px;
+        outline-offset: 2px;
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+        transform: scale(1);
+    }
+
+    50% {
+        outline-width: 6px;
+        outline-offset: 6px;
+        box-shadow: 0 0 30px rgba(76, 175, 80, 1);
+        transform: scale(1.03);
+    }
+}
+
+/* チュートリアル解説ステップ用スタイル */
+.tutorial-intro-message {
+    max-width: 220px !important;
+    text-align: center;
+    padding: 10px 12px !important;
+}
+
+.tutorial-intro-message h4 {
+    font-size: 0.85rem !important;
+    margin-bottom: 6px !important;
+}
+
+.tutorial-intro-body {
+    margin: 6px 0;
+}
+
+.tutorial-intro-content {
+    text-align: center;
+}
+
+.tutorial-intro-content p {
+    margin: 4px 0;
+    line-height: 1.3;
+    font-size: 0.8rem;
+}
+
+.tutorial-intro-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 8px 0;
+    padding: 6px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 8px;
+}
+
+.intro-log {
+    font-size: 1.5rem;
+    animation: introLogPulse 1s ease-in-out infinite;
+}
+
+.intro-arrow {
+    font-size: 1.2rem;
+    color: #4caf50;
+    animation: introArrowBounce 0.8s ease-in-out infinite;
+}
+
+.intro-mushroom {
+    font-size: 1.5rem;
+    animation: introMushroomGrow 1.2s ease-in-out infinite;
+}
+
+@keyframes introLogPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes introArrowBounce {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes introMushroomGrow {
+
+    0%,
+    100% {
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+.tutorial-next {
+    margin-top: 10px;
+    margin-right: 8px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+}
+
+/* 成功時のアイコン */
+.tutorial-success-icon {
+    font-size: 1.4rem;
+    margin: 6px 0;
+    animation: successBounce 0.6s ease-in-out infinite;
+}
+
+@keyframes successBounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* スマホ用：解説ステップのスタイル調整 */
+@media (max-width: 600px) {
+    .tutorial-intro-message {
+        max-width: 90% !important;
+        width: 90% !important;
+    }
+
+    .tutorial-intro-diagram {
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .intro-log,
+    .intro-mushroom {
+        font-size: 2.5rem;
+    }
+
+    .intro-arrow {
+        font-size: 1.5rem;
+    }
+
+    .tutorial-intro-content p {
+        font-size: 0.9rem;
+    }
+
+    .tutorial-next {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+/* 解説ステップ用の暗いオーバーレイ */
+.tutorial-overlay-dark {
+    background: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 解説ステップ中に前面に表示する要素 */
+.tutorial-highlight-element {
+    z-index: 100002 !important;
+}
+
+/* ヘルプ猫は最前面・右下に固定 */
+.help-button.tutorial-highlight-element,
+.help-button.help-talking {
+    position: fixed !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    z-index: 100010 !important;
+}
+
+/* ステップインジケーター（1/16など） */
+.tutorial-step-indicator {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    z-index: 100003;
+}
+
+/* 解説ステップ中のはじまりの木（オーバーレイより前、ポップアップより後ろ） */
+.tutorial-log-highlight {
+    position: relative !important;
+    z-index: 100000 !important;
+}
+
+/* チュートリアル中のスキップボタン（左下角） */
+.tutorial-cat-skip-btn {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 100001;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    background: rgba(100, 100, 100, 0.9);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tutorial-cat-skip-btn:hover {
+    background: rgba(80, 80, 80, 1);
+}
+
+/* スマホ用 */
+@media (max-width: 600px) {
+    .tutorial-cat-skip-btn {
+        bottom: 8px;
+        left: 8px;
+        padding: 3px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* 公式SNSリンク */
+.sns-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.sns-link {
+    display: block;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.sns-link:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+}
+
+.sns-link.youtube {
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+}
+
+.sns-link.instagram {
+    background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.sns-link.tiktok {
+    background: linear-gradient(135deg, #000000, #25f4ee);
+}
+
+.sns-link.threads {
+    background: linear-gradient(135deg, #1e1e1e, #333333);
+}
+
+.sns-link.twitter {
+    background: linear-gradient(135deg, #000000, #14171a);
+}
+
+/* ランキング */
+.ranking-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 10px 0;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 10px;
+}
+
+.ranking-item.top3 {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.ranking-item .rank {
+    font-size: 1rem;
+    min-width: 30px;
+    text-align: center;
+}
+
+.ranking-item .name {
+    flex: 1;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ranking-item .score {
+    font-weight: bold;
+    color: #4caf50;
+    font-size: 0.9rem;
+}
+
+/* ランキング登録ボタン */
+.btn-success {
+    background: linear-gradient(135deg, #ffd700, #ffb300);
+    color: #000;
+    font-weight: bold;
+}
+
+/* 本伏せチュートリアル カルーセル */
+.honfuse-tutorial {
+    max-width: 380px;
+    padding: 20px;
+}
+
+.honfuse-tutorial h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.carousel-container {
+    overflow: hidden;
+    position: relative;
+    touch-action: pan-y;
+}
+
+.carousel-slides {
+    display: flex;
+    transition: transform 0.3s ease;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    padding: 10px 5px;
+    box-sizing: border-box;
+}
+
+.carousel-slide .slide-icon {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.carousel-slide h4 {
+    text-align: center;
+    color: #4caf50;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.carousel-slide p {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.carousel-slide ul {
+    padding-left: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.carousel-slide li {
+    margin-bottom: 5px;
+}
+
+.carousel-slide .tip {
+    background: rgba(76, 175, 80, 0.2);
+    border-left: 3px solid #4caf50;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+}
+
+.carousel-slide .warning {
+    background: rgba(255, 152, 0, 0.2);
+    border-left: 3px solid #ff9800;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+}
+
+.quality-bar-demo {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.quality-bar-demo .bar-label {
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.quality-bar-demo .bar-visual {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 1.5rem;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.carousel-dot.active {
+    background: #4caf50;
+    transform: scale(1.2);
+}

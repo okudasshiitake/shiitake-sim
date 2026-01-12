@@ -22,6 +22,15 @@ function initFirebase() {
         if (typeof firebase !== 'undefined') {
             firebaseApp = firebase.initializeApp(firebaseConfig);
             firebaseDb = firebase.database();
+
+            // 匿名認証を開始（データの読み書きに必須）
+            firebase.auth().signInAnonymously().catch(e => {
+                console.error('Auth failed:', e);
+                if (typeof showToast === 'function') {
+                    showToast('⚠️', '通信エラー: 設定を確認してください');
+                }
+            });
+
             console.log('Firebase initialized');
             return true;
         }

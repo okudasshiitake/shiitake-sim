@@ -204,6 +204,44 @@ function updateBgmButton() {
     }
 }
 
+// BGM再開を促すトースト（スマホ用）
+function showBgmResumeToast() {
+    // 既存のBGMトーストを削除
+    document.querySelectorAll('.bgm-resume-toast').forEach(t => t.remove());
+
+    const toast = document.createElement('div');
+    toast.className = 'toast bgm-resume-toast';
+    toast.style.cssText = 'cursor:pointer; background:linear-gradient(135deg, #4a5568 0%, #2d3748 100%);';
+    toast.innerHTML = `
+        <span class="toast-icon">🎵</span>
+        <span class="toast-text">タップでBGM再開</span>
+    `;
+    toast.onclick = async () => {
+        try {
+            if (bgmAudio) {
+                await bgmAudio.play();
+                bgmPlaying = true;
+                updateBgmButton();
+                showToast('🎵', 'BGM再開！');
+            }
+        } catch (e) {
+            console.warn('BGM resume failed:', e);
+        }
+        toast.remove();
+    };
+
+    document.body.appendChild(toast);
+
+    // 5秒後に自動で消える
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 5000);
+}
+
 // 音声設定: 0=ON(両方), 1=BGM ON, 2=SE ON, 3=OFF(両方)
 function updateAudioButtonStates() {
     // BGMボタン
@@ -295,6 +333,8 @@ document.addEventListener('visibilitychange', async () => {
                 console.log('BGM auto-resumed on page visible');
             } catch (e) {
                 console.warn('BGM auto-resume failed:', e);
+                // スマホでは自動再生が制限されているため、タップで再開するトーストを表示
+                showBgmResumeToast();
             }
         }
 
